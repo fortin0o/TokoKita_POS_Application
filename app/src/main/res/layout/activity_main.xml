@@ -13,107 +13,347 @@
 
         <!-- HEADER -->
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Selamat Siang, Binar"
+            android:text="Selamat Siang, Donald"
             android:textSize="26sp"
             android:textStyle="bold"
-            android:textColor="#333333" />
+            android:textColor="#333333"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="08 Januari 2026"
             android:textSize="14sp"
             android:textColor="#777777"
-            android:layout_marginTop="4dp" />
+            android:layout_marginTop="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
-        <!-- ESTIMASI CARD -->
+        <!-- ESTIMASI -->
         <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             app:cardCornerRadius="16dp"
-            app:cardElevation="4dp">
+            app:cardElevation="4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:padding="16dp"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                     <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:text="Estimasi Hari Ini"
+                        android:textStyle="bold"
                         android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"/>
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         android:text="Rp 0"
+                        android:textStyle="bold"
                         android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
                 </LinearLayout>
 
                 <!-- TOP MENU -->
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:layout_marginTop="16dp"
                     android:gravity="center"
-                    android:layout_marginTop="16dp">
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                    <include layout="@layout/item_icon_menu"/>
+                    <!-- Transaksi Tambah -->
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
 
-                    <include layout="@layout/item_icon_menu"/>
+                        <ImageView
+                            android:src="@android:drawable/ic_input_add"
+                            android:tint="#4CAF50"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"/>
 
-                    <include layout="@layout/item_icon_menu"/>
+                        <TextView
+                            android:text="Transaksi"
+                            android:textSize="12sp"
+                            android:textColor="#4CAF50"
+                            android:layout_marginTop="4dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
+                    <!-- Transaksi Lihat -->
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:src="@android:drawable/ic_menu_view"
+                            android:tint="#2196F3"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"/>
+
+                        <TextView
+                            android:text="Riwayat"
+                            android:textSize="12sp"
+                            android:textColor="#2196F3"
+                            android:layout_marginTop="4dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
+                    <!-- Laporan -->
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:src="@android:drawable/ic_menu_manage"
+                            android:tint="#9C27B0"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"/>
+
+                        <TextView
+                            android:text="Laporan"
+                            android:textSize="12sp"
+                            android:textColor="#9C27B0"
+                            android:layout_marginTop="4dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
                 </LinearLayout>
-
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- MOTIVATION -->
+        <!-- MOTIVASI -->
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:text="Siap melayani pelanggan dengan setulus hati"
             android:textStyle="bold"
             android:textSize="16sp"
-            android:layout_marginTop="20dp" />
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:text="Jangan Kecewakan Pelanggan"
             android:textSize="14sp"
-            android:textColor="#777777" />
+            android:textColor="#777777"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
         <!-- GRID MENU -->
         <GridLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:columnCount="3"
-            android:rowCount="2"
-            android:alignmentMode="alignMargins"
-            android:useDefaultMargins="true">
+            android:useDefaultMargins="true"
+            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-            <include layout="@layout/item_card_menu"/>
-            <include layout="@layout/item_card_menu"/>
-            <include layout="@layout/item_card_menu"/>
-            <include layout="@layout/item_card_menu"/>
-            <include layout="@layout/item_card_menu"/>
-            <include layout="@layout/item_card_menu"/>
+            <!-- Akun -->
+            <androidx.cardview.widget.CardView
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp"
+                android:layout_columnWeight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:padding="12dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:src="@android:drawable/ic_menu_myplaces"
+                        android:tint="#3F51B5"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"/>
+
+                    <TextView
+                        android:text="Akun"
+                        android:textSize="12sp"
+                        android:textColor="#3F51B5"
+                        android:layout_marginTop="6dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Layanan -->
+            <androidx.cardview.widget.CardView
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp"
+                android:layout_columnWeight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:padding="12dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:src="@android:drawable/ic_menu_agenda"
+                        android:tint="#FF9800"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"/>
+
+                    <TextView
+                        android:text="Layanan"
+                        android:textSize="12sp"
+                        android:textColor="#FF9800"
+                        android:layout_marginTop="6dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Cabang -->
+            <androidx.cardview.widget.CardView
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp"
+                android:layout_columnWeight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:padding="12dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:src="@android:drawable/ic_menu_mapmode"
+                        android:tint="#4CAF50"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"/>
+
+                    <TextView
+                        android:text="Cabang"
+                        android:textSize="12sp"
+                        android:textColor="#4CAF50"
+                        android:layout_marginTop="6dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Pengaturan -->
+            <androidx.cardview.widget.CardView
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp"
+                android:layout_columnWeight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:padding="12dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:src="@android:drawable/ic_menu_manage"
+                        android:tint="#607D8B"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"/>
+
+                    <TextView
+                        android:text="Pengaturan"
+                        android:textSize="12sp"
+                        android:textColor="#607D8B"
+                        android:layout_marginTop="6dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Tambahan -->
+            <androidx.cardview.widget.CardView
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp"
+                android:layout_columnWeight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:padding="12dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:src="@android:drawable/ic_menu_compass"
+                        android:tint="#009688"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"/>
+
+                    <TextView
+                        android:text="Tambahan"
+                        android:textSize="12sp"
+                        android:textColor="#009688"
+                        android:layout_marginTop="6dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Bagikan -->
+            <androidx.cardview.widget.CardView
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp"
+                android:layout_columnWeight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:padding="12dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:src="@android:drawable/ic_menu_share"
+                        android:tint="#03A9F4"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"/>
+
+                    <TextView
+                        android:text="Bagikan"
+                        android:textSize="12sp"
+                        android:textColor="#03A9F4"
+                        android:layout_marginTop="6dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
         </GridLayout>
 
