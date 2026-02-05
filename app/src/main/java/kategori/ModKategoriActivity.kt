@@ -3,13 +3,26 @@ package kategori
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.donald.aplikasikedua.R
+import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.database.FirebaseDatabase
 
 class ModKategoriActivity : AppCompatActivity() {
+
+    private val database = FirebaseDatabase.getInstance()
+    private val myRef = database.getReference("kategori")
+
+    private lateinit var tvJudul: TextView
+    private lateinit var etNamaKategori: TextInputEditText
+    private lateinit var spStatusKategori: AutoCompleteTextView
+    private lateinit var btnSimpan: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,24 +35,43 @@ class ModKategoriActivity : AppCompatActivity() {
             insets
         }
 
-        // ===== DROPDOWN STATUS =====
-        // Fixed ID from R.id.spinnerStatus to R.id.actStatus to match activity_mod_kategori.xml
-        val dropdownStatus = findViewById<AutoCompleteTextView>(R.id.actStatus)
+        tvJudul = findViewById(R.id.tvJudul)
+        etNamaKategori = findViewById(R.id.etNama)
+        spStatusKategori = findViewById(R.id.actStatus)
+        btnSimpan = findViewById(R.id.btnSimpan)
 
-        // ambil data dari strings.xml
         val statusList = resources.getStringArray(R.array.status_array)
+        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, statusList)
+        spStatusKategori.setAdapter(adapter)
+        if (statusList.isNotEmpty()) spStatusKategori.setText(statusList[0], false)
 
-        val adapter = ArrayAdapter(
-            this,
-            android.R.layout.simple_dropdown_item_1line,
-            statusList
-        )
+        btnSimpan.setOnClickListener {
+            val nama = etNamaKategori.text.toString().trim()
+            val status = spStatusKategori.text.toString()
 
-        dropdownStatus.setAdapter(adapter)
+            if (nama.isEmpty()) {
+                etNamaKategori.error = "Nama kategori wajib diisi"
+                return@setOnClickListener
+            }
 
-        // optional: set default value
-        if (statusList.isNotEmpty()) {
-            dropdownStatus.setText(statusList[0], false) // Aktif
+            // buat key baru di Firebase
+            val key = myRef.push().key
+            if (key != null) {
+                val kategoriData = mapOf(
+                    "id" to key,
+                    "nama" to nama,
+                    "status" to status
+                )
+
+                myRef.child(key).setValue(kategoriData)
+                    .addOnSuccessListener {
+                        Toast.makeText(this, "Kategori berhasil disimpan", Toast.LENGTH_SHORT).show()
+                        finish() // kembali ke activity sebelumnya
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(this, "Gagal menyimpan kategori: ${it.message}", Toast.LENGTH_LONG).show()
+                    }
+            }
         }
     }
 }

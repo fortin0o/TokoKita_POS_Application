@@ -9,6 +9,7 @@
     tools:context="kategori.ModKategoriActivity">
 
     <TextView
+        android:id="@+id/tvJudul"
         android:layout_marginTop="100dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,7 +23,7 @@
         android:layout_marginTop="24dp"
         android:layout_marginHorizontal="20dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:hint="Nama Kategori">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -34,10 +35,11 @@
 
     <!-- Dropdown Status (TextField + AutoComplete) -->
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/spStatus"
         android:layout_marginTop="16dp"
         android:layout_marginHorizontal="20dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:hint="Status"
         app:endIconMode="dropdown_menu">
 
@@ -51,6 +53,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
+        android:id="@+id/btnSimpan"
         android:layout_marginTop="20dp"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
