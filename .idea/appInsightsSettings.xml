@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.donald.aplikasikedua" />
+                  <option name="mobileSdkAppId" value="1:924653633841:android:eb1d0eaa0b625e1a5cb010" />
+                  <option name="projectId" value="aplikasi-kedua-6116f" />
+                  <option name="projectNumber" value="924653633841" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
