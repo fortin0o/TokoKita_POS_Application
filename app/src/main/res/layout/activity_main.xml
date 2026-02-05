@@ -32,8 +32,8 @@
                 <!-- Profil Image -->
                 <ImageView
                     android:id="@+id/profileImage"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
+                    android:layout_width="58dp"
+                    android:layout_height="58dp"
                     android:src="@android:drawable/ic_menu_gallery"
                     android:contentDescription="Foto profil"
                     android:scaleType="centerCrop"
@@ -69,8 +69,8 @@
                 <!-- Notifikasi Icon -->
                 <ImageView
                     android:id="@+id/ivNotification"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:src="@android:drawable/ic_popup_reminder"
                     android:contentDescription="Notifikasi"
                     app:tint="@android:color/white"
