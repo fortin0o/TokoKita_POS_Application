@@ -55,6 +55,8 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:text="Simpan"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:backgroundTint="@color/material_on_background_emphasis_medium"
+        />
 
 </LinearLayout>
