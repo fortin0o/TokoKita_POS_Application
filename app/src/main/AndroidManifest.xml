@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AplikasiKedua">
         <activity
+            android:name="kategori.DataKategoriActivity"
+            android:exported="false" />
+        <activity
+            android:name="kategori.ModKategoriActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

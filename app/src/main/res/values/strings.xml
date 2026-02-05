@@ -1,3 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">Aplikasi Kedua</string>
+
+    <string-array name="status_array">
+        <item>Aktif</item>
+        <item>Tidak Aktif</item>
+    </string-array>
+
 </resources>
