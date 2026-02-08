@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">Aplikasi Kedua</string>
+    <string name="title_tambah_kategori">Tambah Kategori</string>
+    <string name="hint_nama_kategori">Nama Kategori</string>
+    <string name="hint_status">Status</string>
+    <string name="btn_simpan">Simpan</string>
+    <string name="error_nama_kosong">Nama kategori wajib diisi</string>
+    <string name="msg_simpan_sukses">Kategori berhasil disimpan</string>
+    <string name="msg_simpan_gagal">Gagal menyimpan kategori: %1$s</string>
 
     <string-array name="status_array">
         <item>Aktif</item>
         <item>Tidak Aktif</item>
     </string-array>
-
 </resources>

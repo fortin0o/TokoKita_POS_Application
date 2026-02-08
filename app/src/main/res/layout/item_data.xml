@@ -42,14 +42,16 @@
         </com.google.android.material.card.MaterialCardView>
 
         <TextView
+            android:id="@+id/tvNamaKategori"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="64dp"
             android:text="Kategori"
-            android:textSize="18dp"
+            android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/iconCard"
-            app:layout_constraintEnd_toEndOf="@id/iconCard"
+            app:layout_constraintStart_toEndOf="@id/iconCard"
+            app:layout_constraintEnd_toStartOf="@id/chipAdd"
             app:layout_constraintTop_toTopOf="@id/iconCard" />
 
         <com.google.android.material.chip.Chip

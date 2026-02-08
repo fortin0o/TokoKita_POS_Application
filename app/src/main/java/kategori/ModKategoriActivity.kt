@@ -13,6 +13,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.donald.aplikasikedua.R
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.database.FirebaseDatabase
+import model.modelKategori
 
 class ModKategoriActivity : AppCompatActivity() {
 
@@ -46,6 +47,7 @@ class ModKategoriActivity : AppCompatActivity() {
         if (statusList.isNotEmpty()) spStatusKategori.setText(statusList[0], false)
 
         btnSimpan.setOnClickListener {
+
             val nama = etNamaKategori.text.toString().trim()
             val status = spStatusKategori.text.toString()
 
@@ -54,22 +56,22 @@ class ModKategoriActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // buat key baru di Firebase
             val key = myRef.push().key
             if (key != null) {
-                val kategoriData = mapOf(
-                    "id" to key,
-                    "nama" to nama,
-                    "status" to status
+
+                val kategoriData = modelKategori(
+                    idKategori = key,
+                    namaKategori = nama,
+                    statusKategori = status
                 )
 
                 myRef.child(key).setValue(kategoriData)
                     .addOnSuccessListener {
                         Toast.makeText(this, "Kategori berhasil disimpan", Toast.LENGTH_SHORT).show()
-                        finish() // kembali ke activity sebelumnya
+                        finish()
                     }
                     .addOnFailureListener {
-                        Toast.makeText(this, "Gagal menyimpan kategori: ${it.message}", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, "Gagal menyimpan kategori", Toast.LENGTH_SHORT).show()
                     }
             }
         }
