@@ -80,7 +80,6 @@
             <ImageView
                 android:layout_width="12dp"
                 android:layout_height="12dp"
-                android:src="@drawable/label"
                 app:tint="#333333" />
 
             <TextView
