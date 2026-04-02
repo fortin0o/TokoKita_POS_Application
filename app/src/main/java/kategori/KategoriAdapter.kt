@@ -27,7 +27,16 @@ class KategoriAdapter(private val list: ArrayList<modelKategori>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val data = list[position]
+
         holder.tvNama.text = data.namaKategori
-        holder.chipStatus.text = data.statusKategori
+
+        // 🔥 LOGIC ICON + TEXT
+        if (data.statusKategori.equals("aktif", true)) {
+            holder.chipStatus.text = holder.itemView.context.getString(R.string.status_aktif)
+            holder.chipStatus.setChipIconResource(R.drawable.checklist)
+        } else {
+            holder.chipStatus.text = holder.itemView.context.getString(R.string.status_tidak_aktif)
+            holder.chipStatus.setChipIconResource(R.drawable.close)
+        }
     }
 }

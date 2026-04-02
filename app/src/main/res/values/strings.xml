@@ -13,4 +13,6 @@
         <item>Aktif</item>
         <item>Tidak Aktif</item>
     </string-array>
+    <string name="status_aktif">Aktif</string>
+    <string name="status_tidak_aktif">Tidak Aktif</string>
 </resources>
