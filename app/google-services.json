@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "924653633841",
+    "firebase_url": "https://aplikasi-kedua-6116f-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "aplikasi-kedua-6116f",
+    "storage_bucket": "aplikasi-kedua-6116f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:924653633841:android:eb1d0eaa0b625e1a5cb010",
+        "android_client_info": {
+          "package_name": "com.donald.aplikasikedua"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEFI5ipoKbgZ4MULBzqqu4P34ybxEFRCo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
