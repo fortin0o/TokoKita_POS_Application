@@ -11,21 +11,36 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AplikasiKedua">
+
+        <!-- KATEGORI -->
         <activity
             android:name="kategori.DataKategoriActivity"
             android:exported="false" />
+
         <activity
             android:name="kategori.ModKategoriActivity"
             android:exported="false" />
+
+        <!-- 🔥 PRODUK -->
+        <activity
+            android:name="kategori.DataProdukActivity"
+            android:exported="false" />
+
+        <activity
+            android:name="kategori.TambahProdukActivity"
+            android:exported="false" />
+
+        <!-- MAIN -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
+
 
 </manifest>

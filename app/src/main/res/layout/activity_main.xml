@@ -414,6 +414,7 @@
 
             <!-- Cabang -->
             <androidx.cardview.widget.CardView
+                android:id="@+id/cardCabang"
                 android:layout_columnWeight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
