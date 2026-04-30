@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#FCFAFF"
-    tools:context="TambahProdukActivity">
+    tools:context="kategori.TambahProdukActivity">
 
     <!-- App Bar -->
     <com.google.android.material.appbar.AppBarLayout
@@ -152,7 +152,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Informasi Dasar"
-                android:textColor="#6750A4"
+                android:textColor="#FFA000"
                 android:textStyle="bold"
                 android:layout_marginBottom="12dp"/>
 
@@ -210,7 +210,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Kategori"
-                android:textColor="#6750A4"
+                android:textColor="#FFA000"
                 android:textStyle="bold"
                 android:layout_marginBottom="12dp"/>
 
@@ -223,7 +223,7 @@
                 android:layout_marginBottom="24dp"
                 android:text="Pilih Kategori"
                 android:textColor="#6750A4"
-                app:strokeColor="#6750A4"
+                app:strokeColor="#FFA000"
                 app:cornerRadius="28dp" />
 
             <!-- Harga & Keuntungan -->
@@ -231,7 +231,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Harga \u0026 Keuntungan"
-                android:textColor="#6750A4"
+                android:textColor="#FFA000"
                 android:textStyle="bold"
                 android:layout_marginBottom="12dp"/>
 
@@ -326,7 +326,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Manajemen Stok"
-                android:textColor="#6750A4"
+                android:textColor="#FFA000"
                 android:textStyle="bold"
                 android:layout_marginBottom="12dp"/>
 
@@ -366,7 +366,7 @@
                 android:layout_height="56dp"
                 android:text="Simpan"
                 android:textColor="@android:color/white"
-                app:backgroundTint="#6750A4"
+                app:backgroundTint="#FFA000"
                 app:cornerRadius="28dp"
                 android:layout_marginBottom="32dp"/>
 
