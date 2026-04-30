@@ -3,249 +3,150 @@ package kategori
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.donald.aplikasikedua.R
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.database.FirebaseDatabase
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import model.modelProduk
 
 class TambahProdukActivity : AppCompatActivity() {
 
-    // Views
-    private lateinit var btnBack: ImageView
-    private lateinit var etNamaProduk: TextInputEditText
-    private lateinit var etSku: TextInputEditText
-    private lateinit var etBarcode: TextInputEditText
-    private lateinit var btnPilihKategori: MaterialButton
-    private lateinit var btnPilihCabang: MaterialButton
+    private val db = FirebaseDatabase.getInstance()
+    private val ref = db.getReference("produk")
 
+    private lateinit var etNama: TextInputEditText
+    private lateinit var etBarcode: TextInputEditText
     private lateinit var etHargaBeli: TextInputEditText
-    private lateinit var spinnerTipeKeuntungan: AutoCompleteTextView
     private lateinit var etNilaiProfit: TextInputEditText
     private lateinit var etHargaJual: TextInputEditText
-
     private lateinit var etStok: TextInputEditText
-    private lateinit var cbStokTakTerbatas: MaterialCheckBox
 
+    private lateinit var spinnerProfit: AutoCompleteTextView
+    private lateinit var cbTanpaBatas: MaterialCheckBox
     private lateinit var btnSimpan: MaterialButton
 
-    // Firebase
-    private val database = FirebaseDatabase.getInstance().getReference("produk")
+    private var idKategori: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tambah_produk)
 
-        initViews()
-        setupListeners()
-        setupSpinner()
+        initView()
+        setupDropdown()
+        setupAutoHitung()
+        setupAction()
     }
 
-    private fun initViews() {
-        // App Bar Setup
-        val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
-        toolbar.setNavigationOnClickListener { finish() }
-
-        // Form Dasar
-        etNamaProduk = findViewById(R.id.et_nama_produk)
-        etSku = findViewById(R.id.et_sku)
+    private fun initView() {
+        etNama = findViewById(R.id.et_nama_produk)
         etBarcode = findViewById(R.id.et_barcode)
-
-        // Pilihan
-        btnPilihKategori = findViewById(R.id.btn_pilih_kategori)
-        btnPilihCabang = findViewById(R.id.btn_pilih_cabang)
-
-        // Harga & Keuntungan
         etHargaBeli = findViewById(R.id.et_harga_beli)
-        spinnerTipeKeuntungan = findViewById(R.id.spinner_tipe_keuntungan)
         etNilaiProfit = findViewById(R.id.et_nilai_profit)
         etHargaJual = findViewById(R.id.et_harga_jual)
-
-        // Disable manual input on Harga Jual because it's calculated automatically
-        etHargaJual.isEnabled = false
-
-        // Manajemen Stok
         etStok = findViewById(R.id.et_stok)
-        cbStokTakTerbatas = findViewById(R.id.cb_stok_tanpa_batas)
 
+        spinnerProfit = findViewById(R.id.spinner_tipe_keuntungan)
+        cbTanpaBatas = findViewById(R.id.cb_stok_tanpa_batas)
         btnSimpan = findViewById(R.id.btn_simpan)
-
-        // Placeholder for Kamera/Galeri functionality (to be implemented later)
-        findViewById<MaterialButton>(R.id.btn_kamera).setOnClickListener {
-            Toast.makeText(this, "Fitur Kamera belum tersedia", Toast.LENGTH_SHORT).show()
-        }
-        findViewById<MaterialButton>(R.id.btn_galeri).setOnClickListener {
-            Toast.makeText(this, "Fitur Galeri belum tersedia", Toast.LENGTH_SHORT).show()
-        }
     }
 
-    private fun setupSpinner() {
-        val tipeKeuntungan = arrayOf("Persentase (%)", "Nominal (Rp)")
-        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, tipeKeuntungan)
-        spinnerTipeKeuntungan.setAdapter(adapter)
-
-        spinnerTipeKeuntungan.setOnItemClickListener { _, _, _, _ ->
-            calculateHargaJual()
-        }
+    // 🔽 Dropdown keuntungan
+    private fun setupDropdown() {
+        val list = arrayOf("Persentase (%)", "Nominal (Rp)")
+        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, list)
+        spinnerProfit.setAdapter(adapter)
+        spinnerProfit.setText(list[0], false)
     }
 
-    private fun setupListeners() {
-        val textWatcher = object : TextWatcher {
+    // 🔢 Auto hitung harga jual
+    private fun setupAutoHitung() {
+
+        val watcher = object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                hitungHargaJual()
+            }
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                calculateHargaJual()
-            }
-            override fun afterTextChanged(s: Editable?) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         }
 
-        etHargaBeli.addTextChangedListener(textWatcher)
-        etNilaiProfit.addTextChangedListener(textWatcher)
-
-        // Logika checkbox stok tak terbatas
-        cbStokTakTerbatas.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                etStok.setText("")
-                etStok.isEnabled = false
-            } else {
-                etStok.isEnabled = true
-            }
-        }
-
-        // Simpan Data
-        btnSimpan.setOnClickListener { validsiDataProduk() }
-
-        // Placeholder dialog / intent untuk kategori dan cabang
-        btnPilihKategori.setOnClickListener {
-            Toast.makeText(this, "Pilih Kategori diklik", Toast.LENGTH_SHORT).show()
-        }
-
-        btnPilihCabang.setOnClickListener {
-            Toast.makeText(this, "Pilih Cabang diklik", Toast.LENGTH_SHORT).show()
-        }
+        etHargaBeli.addTextChangedListener(watcher)
+        etNilaiProfit.addTextChangedListener(watcher)
     }
 
-    private fun calculateHargaJual() {
-        val hargaBeliStr = etHargaBeli.text.toString()
-        val nilaiProfitStr = etNilaiProfit.text.toString()
-        val tipeKeuntungan = spinnerTipeKeuntungan.text.toString()
+    private fun hitungHargaJual() {
+        val hargaBeli = etHargaBeli.text.toString().toDoubleOrNull() ?: 0.0
+        val profit = etNilaiProfit.text.toString().toDoubleOrNull() ?: 0.0
+        val tipe = spinnerProfit.text.toString()
 
-        val hargaBeli = hargaBeliStr.toDoubleOrNull() ?: 0.0
-        val profit = nilaiProfitStr.toDoubleOrNull() ?: 0.0
-        var hargaJual = 0.0
-
-        if (tipeKeuntungan == "Persentase (%)") {
-            hargaJual = hargaBeli + (hargaBeli * (profit / 100))
+        val hasil = if (tipe.contains("%")) {
+            hargaBeli + (hargaBeli * profit / 100)
         } else {
-            // Nominal (Rp)
-            hargaJual = hargaBeli + profit
+            hargaBeli + profit
         }
 
-        if (hargaJual > 0) {
-            etHargaJual.setText(hargaJual.toLong().toString())
-        } else {
-            etHargaJual.setText("0")
-        }
+        etHargaJual.setText(hasil.toInt().toString())
     }
 
-    private fun validsiDataProduk() {
-        val namaProduk = etNamaProduk.text.toString().trim()
-        val sku = etSku.text.toString().trim()
-        val barcode = etBarcode.text.toString().trim()
+    // 💾 Simpan ke Firebase
+    private fun setupAction() {
+        btnSimpan.setOnClickListener {
 
-        val hargaBeliStr = etHargaBeli.text.toString().trim()
-        val hargaJualStr = etHargaJual.text.toString().trim()
+            val nama = etNama.text.toString().trim()
+            val barcode = etBarcode.text.toString().trim()
+            val hargaBeli = etHargaBeli.text.toString().toIntOrNull() ?: 0
+            val nilaiProfit = etNilaiProfit.text.toString().toDoubleOrNull() ?: 0.0
+            val hargaJual = etHargaJual.text.toString().toIntOrNull() ?: 0
+            val stok = etStok.text.toString().toIntOrNull() ?: 0
+            val tipe = spinnerProfit.text.toString()
+            val tanpaBatas = cbTanpaBatas.isChecked
 
-        val tipeKeuntungan = spinnerTipeKeuntungan.text.toString().trim()
-        val stokStr = etStok.text.toString().trim()
-        val isTanpaBatas = cbStokTakTerbatas.isChecked
-
-        if (namaProduk.isEmpty()) {
-            etNamaProduk.error = "Nama Produk wajib diisi"
-            etNamaProduk.requestFocus()
-            return
-        }
-
-        if (hargaBeliStr.isEmpty()) {
-            etHargaBeli.error = "Harga Beli wajib diisi"
-            etHargaBeli.requestFocus()
-            return
-        }
-
-        if (!isTanpaBatas && stokStr.isEmpty()) {
-            etStok.error = "Stok wajib diisi jika tidak tak terbatas"
-            etStok.requestFocus()
-            return
-        }
-
-        val hargaBeli = hargaBeliStr.toIntOrNull() ?: 0
-        val hargaJual = hargaJualStr.toIntOrNull() ?: 0
-        val stok = if (isTanpaBatas) 0 else (stokStr.toIntOrNull() ?: 0)
-        val stringTanpaBatas = if (isTanpaBatas) "ya" else "tidak"
-
-        // Gabungkan SKU & Barcode untuk field deskripsi produk (atau simpan sesuai keperluan)
-        val deskripsi = "SKU: $sku \nBarcode: $barcode"
-
-        simpanKeFirebase(
-            namaProduk = namaProduk,
-            deskripsi = deskripsi,
-            hargaBeli = hargaBeli,
-            hargaJual = hargaJual,
-            tipeKeuntungan = tipeKeuntungan,
-            stok = stok,
-            tanpaBatas = stringTanpaBatas
-        )
-    }
-
-    private fun simpanKeFirebase(
-        namaProduk: String,
-        deskripsi: String,
-        hargaBeli: Int,
-        hargaJual: Int,
-        tipeKeuntungan: String,
-        stok: Int,
-        tanpaBatas: String
-    ) {
-        val idProduk = database.push().key ?: return
-
-        val currentDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
-
-        val modelProduk = ModelProduk(
-            idProduk = idProduk,
-            namaProduk = namaProduk,
-            fotoProduk = "", // Kosong sementara, nanti diisi link gambar
-            deskripsiProduk = deskripsi,
-            idKategori = "", // Harus diambil dari picker UI
-            idCabang = "",   // Harus diambil dari picker UI
-            stokProduk = stok,
-            tanpaBatas = tanpaBatas,
-            hargaBeli = hargaBeli,
-            hargaJual = hargaJual,
-            tipeKeuntungan = tipeKeuntungan,
-            manajemenStok = "aktif",
-            statusProduk = "aktif",
-            createdAt = currentDate,
-            updatedAt = currentDate
-        )
-
-        // Panggil Toast Loading... (Opsional bisa pakai ProgressDialog)
-        Toast.makeText(this, "Menyimpan produk...", Toast.LENGTH_SHORT).show()
-
-        database.child(idProduk).setValue(modelProduk)
-            .addOnSuccessListener {
-                Toast.makeText(this, "Produk berhasil ditambahkan", Toast.LENGTH_SHORT).show()
-                finish() // Kembali ke activity sebelumnya
+            // VALIDASI
+            if (nama.isEmpty()) {
+                etNama.error = "Nama wajib diisi"
+                return@setOnClickListener
             }
-            .addOnFailureListener { e ->
-                Toast.makeText(this, "Gagal: ${e.message}", Toast.LENGTH_LONG).show()
+
+            if (hargaBeli == 0) {
+                etHargaBeli.error = "Harga beli wajib diisi"
+                return@setOnClickListener
             }
+
+            val key = ref.push().key
+
+            if (key != null) {
+
+                val time = System.currentTimeMillis().toString()
+
+                val data = modelProduk(
+                    idProduk = key,
+                    namaProduk = nama,
+                    deskripsiProduk = "",
+                    hargaBeli = hargaBeli,
+                    tipeKeuntungan = tipe,
+                    nilaiProfit = nilaiProfit,
+                    hargaJual = hargaJual,
+                    idKategori = idKategori,
+                    statusProduk = "Aktif",
+                    stokProduk = if (tanpaBatas) -1 else stok,
+                    tanpaBatas = tanpaBatas,
+                    barcode = barcode,
+                    fotoProduk = "",
+                    createdAt = time,
+                    updatedAt = time
+                )
+
+                ref.child(key).setValue(data)
+                    .addOnSuccessListener {
+                        Toast.makeText(this, "Produk berhasil disimpan", Toast.LENGTH_SHORT).show()
+                        finish()
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(this, "Gagal menyimpan", Toast.LENGTH_SHORT).show()
+                    }
+            }
+        }
     }
 }

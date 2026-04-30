@@ -2,17 +2,26 @@ package model
 
 import android.os.Parcel
 import android.os.Parcelable
-import model.modelKategori
 
 data class modelProduk (
     var idProduk: String? = null,
     var namaProduk: String? = null,
     var deskripsiProduk: String? = null,
-    var hargaProduk: Int? = 0,
+
+    var hargaBeli: Int? = 0,
+    var tipeKeuntungan: String? = null,
+    var nilaiProfit: Double? = 0.0,
+    var hargaJual: Int? = 0,
+
     var idKategori: String? = null,
-    var statusProduk: String? = null,
+    var statusProduk: String? = "Aktif",
+
     var stokProduk: Int? = 0,
+    var tanpaBatas: Boolean? = false,
+
+    var barcode: String? = null,
     var fotoProduk: String? = null,
+
     var createdAt: String? = null,
     var updatedAt: String? = null
 ) : Parcelable {
@@ -21,11 +30,21 @@ data class modelProduk (
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
+
         parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readString(),
-        parcel.readString(),
+        parcel.readValue(Double::class.java.classLoader) as? Double,
         parcel.readValue(Int::class.java.classLoader) as? Int,
+
         parcel.readString(),
+        parcel.readString(),
+
+        parcel.readValue(Int::class.java.classLoader) as? Int,
+        parcel.readValue(Boolean::class.java.classLoader) as? Boolean,
+
+        parcel.readString(),
+        parcel.readString(),
+
         parcel.readString(),
         parcel.readString()
     )
@@ -34,11 +53,21 @@ data class modelProduk (
         parcel.writeString(idProduk)
         parcel.writeString(namaProduk)
         parcel.writeString(deskripsiProduk)
-        parcel.writeValue(hargaProduk)
+
+        parcel.writeValue(hargaBeli)
+        parcel.writeString(tipeKeuntungan)
+        parcel.writeValue(nilaiProfit)
+        parcel.writeValue(hargaJual)
+
         parcel.writeString(idKategori)
         parcel.writeString(statusProduk)
+
         parcel.writeValue(stokProduk)
+        parcel.writeValue(tanpaBatas)
+
+        parcel.writeString(barcode)
         parcel.writeString(fotoProduk)
+
         parcel.writeString(createdAt)
         parcel.writeString(updatedAt)
     }
@@ -55,4 +84,3 @@ data class modelProduk (
         }
     }
 }
-
