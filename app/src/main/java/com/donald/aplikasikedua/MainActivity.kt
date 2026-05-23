@@ -2,7 +2,7 @@ package com.donald.aplikasikedua
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.LinearLayout
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
@@ -26,17 +26,17 @@ class MainActivity : AppCompatActivity() {
         }
 
         // ==============================
-        // 👉 KATEGORI (LinearLayout)
+        // 👉 KATEGORI (MaterialCardView)
         // ==============================
-        val cardKategori = findViewById<LinearLayout>(R.id.cardKategori)
+        val cardKategori = findViewById<View>(R.id.cardKategori)
         cardKategori.setOnClickListener {
             startActivity(Intent(this, DataKategoriActivity::class.java))
         }
 
         // ==============================
-        // 👉 CABANG (CardView)
+        // 👉 CABANG (MaterialCardView)
         // ==============================
-        val cardCabang = findViewById<CardView>(R.id.cardCabang)
+        val cardCabang = findViewById<View>(R.id.cardCabang)
         cardCabang.setOnClickListener {
             startActivity(Intent(this, DataProdukActivity::class.java))
         }

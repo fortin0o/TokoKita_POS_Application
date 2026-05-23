@@ -5,4 +5,11 @@
     <color name="green_status">#46923C</color>
     <color name="green">#4CAF50</color>
     <color name="red">#F44336</color>
+
+    <!-- POS Design Tokens -->
+    <color name="primary_teal">#0D5C6A</color>
+    <color name="background_gray">#F7F9FA</color>
+    <color name="text_dark">#333333</color>
+    <color name="text_gray">#757575</color>
+    <color name="surface_white">#FFFFFF</color>
 </resources>

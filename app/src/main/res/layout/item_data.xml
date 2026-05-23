@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cvCARD_KATEGORI"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/cvCARD_KATEGORI"
-    android:layout_marginHorizontal="8dp"
-    android:layout_marginVertical="4dp"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp"
     android:clickable="true"
     android:focusable="true"
-    android:backgroundTint="@color/white"
-    android:foreground="?android:attr/selectableItemBackground"
-    app:cardCornerRadius="10dp"
+    app:cardBackgroundColor="@color/surface_white"
+    app:cardCornerRadius="20dp"
     app:cardElevation="2dp"
     app:strokeWidth="0dp">
 
@@ -21,10 +19,12 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
+        <!-- Thumbnail Placeholder -->
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/iconCard"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:id="@+id/thumbnailCard"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:cardBackgroundColor="@color/background_gray"
             app:cardCornerRadius="12dp"
             app:cardElevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -33,46 +33,73 @@
 
             <ImageView
                 android:id="@+id/iviconKategori"
-                android:layout_width="46dp"
-                android:layout_height="47dp"
-                android:background="@drawable/kategori"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:src="@drawable/kategori"
+                app:tint="@color/text_gray" />
         </com.google.android.material.card.MaterialCardView>
 
-        <TextView
-            android:id="@+id/tvNamaKategori"
-            android:layout_width="match_parent"
+        <!-- Text Content -->
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="64dp"
-            android:text="Kategori"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/iconCard"
-            app:layout_constraintStart_toEndOf="@id/iconCard"
-            app:layout_constraintEnd_toStartOf="@id/chipAdd"
-            app:layout_constraintTop_toTopOf="@id/iconCard" />
+            android:layout_marginStart="16dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/actionLayout"
+            app:layout_constraintStart_toEndOf="@id/thumbnailCard"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chipAdd"
+            <TextView
+                android:id="@+id/tvNamaKategori"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kategori Name"
+                android:textColor="@color/text_dark"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipAdd"
+                style="@style/Widget.Material3.Chip.Assist.Elevated"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_marginTop="4dp"
+                android:text="Aktif"
+                android:textColor="@color/white"
+                android:textSize="10sp"
+                app:chipBackgroundColor="@color/green"
+                app:chipCornerRadius="6dp"
+                app:chipStrokeWidth="0dp" />
+        </LinearLayout>
+
+        <!-- Action Buttons -->
+        <LinearLayout
+            android:id="@+id/actionLayout"
             android:layout_width="wrap_content"
-            android:layout_height="56dp"
-            android:text="Aktif"
-            app:layout_constraintTop_toTopOf="@id/iconCard"
-            app:layout_constraintBottom_toBottomOf="@id/iconCard"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:textSize="14sp"
+            app:layout_constraintTop_toTopOf="parent">
 
-            app:chipIcon="@drawable/checklist"
-            app:chipIconSize="18dp"
-            app:chipIconVisible="true"
+            <ImageView
+                android:id="@+id/ivEdit"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@android:drawable/ic_menu_edit"
+                app:tint="@color/green" />
 
-            app:chipBackgroundColor="@android:color/transparent"
-            app:chipStrokeWidth="1dp"
-            app:chipStrokeColor="#D0D0D0"
+            <ImageView
+                android:id="@+id/ivDelete"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="8dp"
+                android:src="@android:drawable/ic_menu_close_clear_cancel"
+                app:tint="@color/red" />
+        </LinearLayout>
 
-            app:chipCornerRadius="5dp"
-            app:rippleColor="#E0E0E0"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

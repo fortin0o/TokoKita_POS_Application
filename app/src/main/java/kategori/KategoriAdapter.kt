@@ -3,6 +3,7 @@ package kategori
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.donald.aplikasikedua.R
@@ -15,6 +16,8 @@ class KategoriAdapter(private val list: ArrayList<modelKategori>) :
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvNama: TextView = itemView.findViewById(R.id.tvNamaKategori)
         val chipStatus: Chip = itemView.findViewById(R.id.chipAdd)
+        val ivEdit: ImageView = itemView.findViewById(R.id.ivEdit)
+        val ivDelete: ImageView = itemView.findViewById(R.id.ivDelete)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -33,10 +36,18 @@ class KategoriAdapter(private val list: ArrayList<modelKategori>) :
         // 🔥 LOGIC ICON + TEXT
         if (data.statusKategori.equals("aktif", true)) {
             holder.chipStatus.text = holder.itemView.context.getString(R.string.status_aktif)
-            holder.chipStatus.setChipIconResource(R.drawable.checklist)
+            holder.chipStatus.setChipBackgroundColorResource(R.color.green)
         } else {
             holder.chipStatus.text = holder.itemView.context.getString(R.string.status_tidak_aktif)
-            holder.chipStatus.setChipIconResource(R.drawable.close)
+            holder.chipStatus.setChipBackgroundColorResource(R.color.red)
+        }
+        
+        holder.ivEdit.setOnClickListener {
+            // Handle edit
+        }
+        
+        holder.ivDelete.setOnClickListener {
+            // Handle delete
         }
     }
 }

@@ -1,9 +1,8 @@
 package kategori
 
 import android.os.Bundle
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -11,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.donald.aplikasikedua.R
+import com.google.android.material.chip.ChipGroup
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.database.FirebaseDatabase
 import model.modelKategori
@@ -22,8 +22,9 @@ class ModKategoriActivity : AppCompatActivity() {
 
     private lateinit var tvJudul: TextView
     private lateinit var etNamaKategori: TextInputEditText
-    private lateinit var spStatusKategori: AutoCompleteTextView
+    private lateinit var cgStatus: ChipGroup
     private lateinit var btnSimpan: Button
+    private lateinit var ivBack: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,18 +39,16 @@ class ModKategoriActivity : AppCompatActivity() {
 
         tvJudul = findViewById(R.id.tvJudul)
         etNamaKategori = findViewById(R.id.etNama)
-        spStatusKategori = findViewById(R.id.actStatus)
+        cgStatus = findViewById(R.id.cgStatus)
         btnSimpan = findViewById(R.id.btnSimpan)
+        ivBack = findViewById(R.id.ivBack)
 
-        val statusList = resources.getStringArray(R.array.status_array)
-        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, statusList)
-        spStatusKategori.setAdapter(adapter)
-        if (statusList.isNotEmpty()) spStatusKategori.setText(statusList[0], false)
+        ivBack.setOnClickListener { finish() }
 
         btnSimpan.setOnClickListener {
 
             val nama = etNamaKategori.text.toString().trim()
-            val status = spStatusKategori.text.toString()
+            val status = if (cgStatus.checkedChipId == R.id.chipAktif) "Aktif" else "Tidak Aktif"
 
             if (nama.isEmpty()) {
                 etNamaKategori.error = "Nama kategori wajib diisi"

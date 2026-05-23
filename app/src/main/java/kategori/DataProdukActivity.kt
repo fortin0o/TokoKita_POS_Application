@@ -2,6 +2,8 @@ package kategori
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.ImageView
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,6 +41,7 @@ class DataProdukActivity : AppCompatActivity() {
         rvProduk = findViewById(R.id.rvProduk)
         svProduk = findViewById(R.id.svProduk)
         fabTambah = findViewById(R.id.fabTambah)
+        findViewById<ImageView>(R.id.ivBack).setOnClickListener { finish() }
     }
 
     private fun setupRecycler() {
