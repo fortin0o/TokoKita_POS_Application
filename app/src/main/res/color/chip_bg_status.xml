@@ -3,5 +3,5 @@
     <!-- Selected state (Green/Teal) -->
     <item android:color="@color/primary_teal" android:state_checked="true" />
     <!-- Default state (Gray) -->
-    <item android:color="#E0E0E0" />
+    <item android:color="@color/chip_unselected_bg" />
 </selector>
