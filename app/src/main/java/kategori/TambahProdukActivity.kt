@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.donald.aplikasikedua.R
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.checkbox.MaterialCheckBox
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -33,6 +35,7 @@ class TambahProdukActivity : AppCompatActivity() {
     private lateinit var actCabang: AutoCompleteTextView
     private lateinit var actKategori: AutoCompleteTextView
     private lateinit var cbTanpaBatas: MaterialCheckBox
+    private lateinit var cgStatus: ChipGroup
     private lateinit var btnSimpan: MaterialButton
 
     private var idKategori: String = ""
@@ -65,6 +68,7 @@ class TambahProdukActivity : AppCompatActivity() {
         actCabang = findViewById(R.id.actCabang)
         actKategori = findViewById(R.id.actKategori)
         cbTanpaBatas = findViewById(R.id.cb_stok_tanpa_batas)
+        cgStatus = findViewById(R.id.cgStatus)
         btnSimpan = findViewById(R.id.btn_simpan)
         
         findViewById<ImageView>(R.id.ivBack).setOnClickListener { finish() }
@@ -165,6 +169,13 @@ class TambahProdukActivity : AppCompatActivity() {
             val stok = etStok.text.toString().toIntOrNull() ?: 0
             val tipe = spinnerProfit.text.toString()
             val tanpaBatas = cbTanpaBatas.isChecked
+            
+            val selectedChipId = cgStatus.checkedChipId
+            val status = if (selectedChipId != -1) {
+                findViewById<Chip>(selectedChipId).text.toString()
+            } else {
+                "Aktif"
+            }
 
             // VALIDASI
             if (nama.isEmpty()) {
@@ -192,7 +203,8 @@ class TambahProdukActivity : AppCompatActivity() {
                     nilaiProfit = nilaiProfit,
                     hargaJual = hargaJual,
                     idKategori = idKategori,
-                    statusProduk = "Aktif",
+                    idCabang = idCabang,
+                    statusProduk = status,
                     stokProduk = if (tanpaBatas) -1 else stok,
                     tanpaBatas = tanpaBatas,
                     barcode = barcode,

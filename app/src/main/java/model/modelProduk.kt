@@ -14,6 +14,7 @@ data class modelProduk (
     var hargaJual: Int? = 0,
 
     var idKategori: String? = null,
+    var idCabang: String? = null,
     var statusProduk: String? = "Aktif",
 
     var stokProduk: Int? = 0,
@@ -38,6 +39,7 @@ data class modelProduk (
 
         parcel.readString(),
         parcel.readString(),
+        parcel.readString(),
 
         parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readValue(Boolean::class.java.classLoader) as? Boolean,
@@ -60,6 +62,7 @@ data class modelProduk (
         parcel.writeValue(hargaJual)
 
         parcel.writeString(idKategori)
+        parcel.writeString(idCabang)
         parcel.writeString(statusProduk)
 
         parcel.writeValue(stokProduk)
