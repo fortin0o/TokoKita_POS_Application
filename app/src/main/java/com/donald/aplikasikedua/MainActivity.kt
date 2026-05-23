@@ -7,11 +7,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import kategori.DataCabangActivity
-import kategori.DataKategoriActivity
-import kategori.DataPegawaiActivity
-import kategori.DataProdukActivity
-import kategori.DataTransaksiActivity
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import kategori.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -49,11 +46,49 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, DataCabangActivity::class.java))
         }
 
+        // 5. Layanan
+        findViewById<View>(R.id.cardLayanan).setOnClickListener {
+            startActivity(Intent(this, LayananActivity::class.java))
+        }
+
+        // 6. Printer
+        findViewById<View>(R.id.cardPrinter).setOnClickListener {
+            startActivity(Intent(this, PrinterActivity::class.java))
+        }
+
         // --- Quick Actions ---
         
         // 1. Transaksi
         findViewById<View>(R.id.actionTransaksi).setOnClickListener {
             startActivity(Intent(this, DataTransaksiActivity::class.java))
         }
+
+        // 2. Pelanggan
+        findViewById<View>(R.id.actionPelanggan).setOnClickListener {
+            startActivity(Intent(this, DataPelangganActivity::class.java))
+        }
+
+        // 3. Laporan
+        findViewById<View>(R.id.actionLaporan).setOnClickListener {
+            startActivity(Intent(this, LaporanActivity::class.java))
+        }
+
+        // --- Profile Bottom Sheet ---
+        findViewById<View>(R.id.ivProfile).setOnClickListener {
+            showProfileBottomSheet()
+        }
+    }
+
+    private fun showProfileBottomSheet() {
+        val dialog = BottomSheetDialog(this)
+        val view = layoutInflater.inflate(R.layout.layout_profile_bottom_sheet, null)
+        
+        view.findViewById<View>(R.id.menuLogout).setOnClickListener {
+            dialog.dismiss()
+            // Logout logic
+        }
+        
+        dialog.setContentView(view)
+        dialog.show()
     }
 }
