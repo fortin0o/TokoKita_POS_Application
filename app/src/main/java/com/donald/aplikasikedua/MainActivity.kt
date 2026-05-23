@@ -96,8 +96,8 @@ class MainActivity : AppCompatActivity() {
             else -> "Selamat Malam"
         }
 
-        // You can replace "Donald" with logic to fetch from Firebase/SharedPreferences
-        val userName = "Donald" 
+        // You can replace "TokoKita" with logic to fetch from Firebase/SharedPreferences
+        val userName = "TokoKita"
         tvGreeting.text = "$greetingText, $userName!"
     }
 

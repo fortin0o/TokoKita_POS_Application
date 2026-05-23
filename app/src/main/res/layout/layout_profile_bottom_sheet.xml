@@ -18,15 +18,15 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pusat Kendali Owner"
-        android:textColor="@color/text_dark"
-        android:textSize="18sp"
+        android:text="TokoKita Control"
+        android:textColor="@color/primary_brand"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Kelola sistem dan pengaturan aplikasi"
+        android:text="Pusat Kendali &amp; Pengaturan Aplikasi"
         android:textColor="@color/text_gray"
         android:textSize="12sp" />
 

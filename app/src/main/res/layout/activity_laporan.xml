@@ -19,6 +19,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="24dp"
+            android:background="@color/primary_brand"
             app:layout_constraintTop_toTopOf="parent">
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -28,13 +29,13 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@android:drawable/ic_menu_revert"
-                    app:tint="@color/primary_teal" />
+                    app:tint="@color/brand_cream" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:text="Laporan Penjualan"
-                    android:textColor="@color/primary_teal"
+                    android:textColor="@color/white"
                     android:textSize="18sp"
                     android:textStyle="bold" />
                 <ImageView
@@ -42,7 +43,7 @@
                     android:layout_height="24dp"
                     android:layout_alignParentEnd="true"
                     android:src="@android:drawable/ic_menu_today"
-                    app:tint="@color/primary_teal" />
+                    app:tint="@color/brand_cream" />
             </RelativeLayout>
         </LinearLayout>
 

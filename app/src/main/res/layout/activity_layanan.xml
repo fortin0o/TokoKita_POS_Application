@@ -14,6 +14,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="24dp"
+        android:background="@color/primary_brand"
         app:layout_constraintTop_toTopOf="parent">
         <RelativeLayout
             android:layout_width="match_parent"
@@ -23,7 +24,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@android:drawable/ic_menu_revert"
-                app:tint="@color/primary_teal" />
+                app:tint="@color/brand_cream" />
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -34,14 +35,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Pusat Layanan"
-                    android:textColor="@color/primary_teal"
+                    android:textColor="@color/white"
                     android:textSize="20sp"
                     android:textStyle="bold" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Akses layanan cepat operasional"
-                    android:textColor="@color/text_gray"
+                    android:text="TokoKita Services"
+                    android:textColor="@color/brand_cream"
                     android:textSize="12sp" />
             </LinearLayout>
         </RelativeLayout>

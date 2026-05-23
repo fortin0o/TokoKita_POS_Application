@@ -17,8 +17,20 @@
             android:id="@+id/headerBg"
             android:layout_width="match_parent"
             android:layout_height="220dp"
-            android:background="@color/primary_teal"
+            android:background="@color/primary_brand"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Logo Overlay (Subtle Brand Shape) -->
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="-20dp"
+            android:layout_marginEnd="-20dp"
+            android:alpha="0.15"
+            android:src="@drawable/ic_launcher_foreground"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/brand_cream" />
 
         <!-- Greeting Section -->
         <LinearLayout
@@ -97,7 +109,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Rp0"
-                    android:textColor="@color/text_dark"
+                    android:textColor="@color/primary_brand"
                     android:textSize="32sp"
                     android:textStyle="bold" />
 
@@ -105,7 +117,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginVertical="24dp"
-                    android:background="@color/background_gray" />
+                    android:background="@color/brand_cream" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -125,15 +137,16 @@
                             android:layout_width="28dp"
                             android:layout_height="28dp"
                             android:src="@drawable/transaction"
-                            app:tint="@color/primary_teal" />
+                            app:tint="@color/primary_brand" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:text="Transaksi"
-                            android:textColor="@color/text_gray"
-                            android:textSize="12sp" />
+                            android:textColor="@color/primary_brand"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                     <!-- Pelanggan -->
@@ -149,15 +162,16 @@
                             android:layout_width="28dp"
                             android:layout_height="28dp"
                             android:src="@android:drawable/ic_menu_myplaces"
-                            app:tint="@color/primary_teal" />
+                            app:tint="@color/primary_brand" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:text="Pelanggan"
-                            android:textColor="@color/text_gray"
-                            android:textSize="12sp" />
+                            android:textColor="@color/primary_brand"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                     <!-- Laporan -->
@@ -173,15 +187,16 @@
                             android:layout_width="28dp"
                             android:layout_height="28dp"
                             android:src="@android:drawable/ic_menu_agenda"
-                            app:tint="@color/primary_teal" />
+                            app:tint="@color/primary_brand" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:text="Laporan"
-                            android:textColor="@color/text_gray"
-                            android:textSize="12sp" />
+                            android:textColor="@color/primary_brand"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -230,12 +245,13 @@
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:src="@android:drawable/ic_menu_sort_by_size"
-                        app:tint="@color/primary_teal" />
+                        app:tint="@color/primary_brand" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:text="Menu"
+                        android:textColor="@color/primary_brand"
                         android:textStyle="bold"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -262,12 +278,13 @@
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:src="@drawable/kategori"
-                        app:tint="@color/primary_teal" />
+                        app:tint="@color/primary_brand" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:text="Kategori"
+                        android:textColor="@color/primary_brand"
                         android:textStyle="bold"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -294,12 +311,13 @@
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:src="@drawable/pegawai"
-                        app:tint="@color/primary_teal" />
+                        app:tint="@color/primary_brand" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:text="Pegawai"
+                        android:textColor="@color/primary_brand"
                         android:textStyle="bold"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -326,12 +344,13 @@
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:src="@android:drawable/ic_menu_gallery"
-                        app:tint="@color/primary_teal" />
+                        app:tint="@color/primary_brand" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:text="Layanan"
+                        android:textColor="@color/primary_brand"
                         android:textStyle="bold"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -358,12 +377,13 @@
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:src="@android:drawable/ic_dialog_map"
-                        app:tint="@color/primary_teal" />
+                        app:tint="@color/primary_brand" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:text="Cabang"
+                        android:textColor="@color/primary_brand"
                         android:textStyle="bold"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -390,12 +410,13 @@
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:src="@android:drawable/ic_menu_share"
-                        app:tint="@color/primary_teal" />
+                        app:tint="@color/primary_brand" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:text="Printer"
+                        android:textColor="@color/primary_brand"
                         android:textStyle="bold"
                         android:textSize="14sp" />
                 </LinearLayout>

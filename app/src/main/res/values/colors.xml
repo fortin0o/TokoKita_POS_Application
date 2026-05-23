@@ -6,9 +6,12 @@
     <color name="green">#4CAF50</color>
     <color name="red">#F44336</color>
 
-    <!-- POS Design Tokens -->
-    <color name="primary_teal">#0D5C6A</color>
-    <color name="background_gray">#F7F9FA</color>
+    <!-- TokoKita Design Tokens -->
+    <color name="primary_brand">#588A96</color>
+    <color name="brand_cream">#FDEBB3</color>
+    <color name="background_light">#FDF6E3</color>
+    <color name="primary_teal">#588A96</color> <!-- Alias for backward compatibility -->
+    <color name="background_gray">#FDF6E3</color> <!-- Alias for backward compatibility -->
     <color name="text_dark">#333333</color>
     <color name="text_gray">#757575</color>
     <color name="surface_white">#FFFFFF</color>

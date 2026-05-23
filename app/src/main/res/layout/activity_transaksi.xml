@@ -12,7 +12,7 @@
         android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/primary_teal"
+        android:background="@color/primary_brand"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:padding="16dp"
@@ -23,14 +23,14 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@android:drawable/ic_menu_revert"
-            app:tint="@color/white" />
+            app:tint="@color/brand_cream" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_weight="1"
-            android:text="Transaksi"
+            android:text="TokoKita Cashier"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -40,7 +40,7 @@
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:src="@drawable/history"
-            app:tint="@color/white" />
+            app:tint="@color/brand_cream" />
     </LinearLayout>
 
     <!-- Main Content Area -->

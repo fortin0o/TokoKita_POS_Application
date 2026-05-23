@@ -56,7 +56,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Kategori Name"
-                android:textColor="@color/text_dark"
+                android:textColor="@color/primary_brand"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
