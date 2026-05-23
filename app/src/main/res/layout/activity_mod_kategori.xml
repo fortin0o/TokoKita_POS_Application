@@ -113,16 +113,17 @@
                     android:layout_height="wrap_content"
                     android:text="Aktif"
                     android:checked="true"
-                    app:chipBackgroundColor="@color/primary_teal"
-                    app:chipSurfaceColor="@color/background_gray"
-                    android:textColor="@color/white" />
+                    app:chipBackgroundColor="@color/chip_bg_status"
+                    android:textColor="@color/chip_text_status" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipTidakAktif"
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tidak Aktif" />
+                    android:text="Tidak Aktif"
+                    app:chipBackgroundColor="@color/chip_bg_status"
+                    android:textColor="@color/chip_text_status" />
             </com.google.android.material.chip.ChipGroup>
 
         </LinearLayout>

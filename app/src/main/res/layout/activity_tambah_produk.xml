@@ -331,20 +331,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                app:singleSelection="true">
+                app:singleSelection="true"
+                app:selectionRequired="true">
                 <com.google.android.material.chip.Chip
+                    android:id="@+id/chipReady"
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Tersedia (Ready)"
                     android:checked="true"
-                    app:chipBackgroundColor="@color/primary_teal"
-                    android:textColor="@color/white" />
+                    app:chipBackgroundColor="@color/chip_bg_status"
+                    android:textColor="@color/chip_text_status" />
                 <com.google.android.material.chip.Chip
+                    android:id="@+id/chipHabis"
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Habis / Nonaktif" />
+                    android:text="Habis / Nonaktif"
+                    app:chipBackgroundColor="@color/chip_bg_status"
+                    android:textColor="@color/chip_text_status" />
             </com.google.android.material.chip.ChipGroup>
 
             <Button
