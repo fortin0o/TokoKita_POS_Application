@@ -37,6 +37,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/tvJudul"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Tambah Menu"
@@ -152,6 +153,7 @@
                         app:boxCornerRadiusBottomStart="12dp"
                         app:boxCornerRadiusBottomEnd="12dp">
                         <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_foto_produk"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
                     </com.google.android.material.textfield.TextInputLayout>

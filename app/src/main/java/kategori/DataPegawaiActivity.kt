@@ -40,8 +40,9 @@ class DataPegawaiActivity : AppCompatActivity() {
         
         adapter = AdapterPegawai(listPegawai, 
             onEdit = { pegawai ->
-                // Handle Edit
-                Toast.makeText(this, "Edit ${pegawai.namaPegawai}", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, TambahPegawaiActivity::class.java)
+                intent.putExtra("pegawai", pegawai)
+                startActivity(intent)
             },
             onDelete = { pegawai ->
                 // Handle Delete

@@ -1,5 +1,6 @@
 package adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.donald.aplikasikedua.R
 import com.google.android.material.chip.Chip
+import kategori.TambahProdukActivity
 import model.modelProduk
 
 class ProdukAdapter(private val list: ArrayList<modelProduk>) :
@@ -39,26 +41,28 @@ class ProdukAdapter(private val list: ArrayList<modelProduk>) :
         holder.harga.text = "Rp %,d".format(harga)
 
         // ✅ Status Produk
-        val statusText = data.statusProduk ?: "Aktif"
+        val statusText = data.statusProduk ?: "Habis / Nonaktif"
         holder.status.text = statusText
 
-        if (statusText.equals("Aktif", ignoreCase = true)) {
-            holder.status.setTextColor(holder.itemView.context.getColor(R.color.green))
-            holder.status.chipStrokeColor =
-                holder.itemView.context.getColorStateList(R.color.green)
+        if (statusText.contains("Tersedia") || statusText.equals("Aktif", ignoreCase = true)) {
+            holder.status.setTextColor(holder.itemView.context.getColor(R.color.white))
+            holder.status.setChipBackgroundColorResource(R.color.primary_teal)
+            holder.status.chipStrokeWidth = 0f
         } else {
-            holder.status.setTextColor(holder.itemView.context.getColor(R.color.red))
-            holder.status.chipStrokeColor =
-                holder.itemView.context.getColorStateList(R.color.red)
+            holder.status.setTextColor(holder.itemView.context.getColor(R.color.text_dark))
+            holder.status.setChipBackgroundColorResource(android.R.color.darker_gray)
+            holder.status.chipStrokeWidth = 0f
         }
 
         // ✅ Placeholder gambar (sementara)
         holder.img.setImageResource(android.R.drawable.ic_menu_gallery)
 
 
-        // 🔥 Klik item (siap untuk next fitur)
+        // 🔥 Klik item
         holder.itemView.setOnClickListener {
-            // nanti bisa ke detail produk
+            val intent = Intent(holder.itemView.context, TambahProdukActivity::class.java)
+            intent.putExtra("produk", data)
+            holder.itemView.context.startActivity(intent)
         }
     }
 

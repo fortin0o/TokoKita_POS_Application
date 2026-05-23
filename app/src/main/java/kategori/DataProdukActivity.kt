@@ -91,17 +91,14 @@ class DataProdukActivity : AppCompatActivity() {
             filtered.addAll(listProduk)
         } else {
             for (item in listProduk) {
-                if (item.namaProduk
-                        ?.lowercase()
-                        ?.contains(query.lowercase()) == true
+                if (item.namaProduk?.lowercase()?.contains(query.lowercase()) == true ||
+                    item.barcode?.lowercase()?.contains(query.lowercase()) == true
                 ) {
                     filtered.add(item)
                 }
             }
         }
-
-        adapter = ProdukAdapter(filtered)
-        rvProduk.adapter = adapter
+        adapter.updateData(filtered)
     }
 
     // ➕ ACTION FAB

@@ -26,10 +26,14 @@ class ModKategoriActivity : AppCompatActivity() {
     private lateinit var btnSimpan: Button
     private lateinit var ivBack: ImageView
 
+    private var kategoriExisting: modelKategori? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_mod_kategori)
+
+        kategoriExisting = intent.getParcelableExtra("kategori")
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -43,6 +47,16 @@ class ModKategoriActivity : AppCompatActivity() {
         btnSimpan = findViewById(R.id.btnSimpan)
         ivBack = findViewById(R.id.ivBack)
 
+        if (kategoriExisting != null) {
+            tvJudul.text = "Ubah Kategori"
+            etNamaKategori.setText(kategoriExisting?.namaKategori)
+            if (kategoriExisting?.statusKategori == "Aktif") {
+                cgStatus.check(R.id.chipAktif)
+            } else {
+                cgStatus.check(R.id.chipTidakAktif)
+            }
+        }
+
         ivBack.setOnClickListener { finish() }
 
         btnSimpan.setOnClickListener {
@@ -55,7 +69,7 @@ class ModKategoriActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val key = myRef.push().key
+            val key = kategoriExisting?.idKategori ?: myRef.push().key
             if (key != null) {
 
                 val kategoriData = modelKategori(

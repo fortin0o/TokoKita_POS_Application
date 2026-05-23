@@ -26,6 +26,7 @@ class TambahProdukActivity : AppCompatActivity() {
 
     private lateinit var etNama: TextInputEditText
     private lateinit var etBarcode: TextInputEditText
+    private lateinit var etFoto: TextInputEditText
     private lateinit var etHargaBeli: TextInputEditText
     private lateinit var etNilaiProfit: TextInputEditText
     private lateinit var etHargaJual: TextInputEditText
@@ -41,6 +42,8 @@ class TambahProdukActivity : AppCompatActivity() {
     private var idKategori: String = ""
     private var idCabang: String = ""
 
+    private var produkExisting: modelProduk? = null
+
     private val listKategori = mutableListOf<modelKategori>()
     private val listCabang = mutableListOf<modelCabang>()
 
@@ -48,17 +51,47 @@ class TambahProdukActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tambah_produk)
 
+        produkExisting = intent.getParcelableExtra("produk")
+
         initView()
         setupDropdown()
         setupAutoHitung()
         loadKategori()
         loadCabang()
         setupAction()
+        
+        fillData()
+    }
+
+    private fun fillData() {
+        produkExisting?.let {
+            findViewById<TextView>(R.id.tvJudul).text = "Ubah Menu"
+            etNama.setText(it.namaProduk)
+            etBarcode.setText(it.barcode)
+            etFoto.setText(it.fotoProduk)
+            etHargaBeli.setText(it.hargaBeli.toString())
+            etNilaiProfit.setText(it.nilaiProfit.toString())
+            etHargaJual.setText(it.hargaJual.toString())
+            etStok.setText(it.stokProduk.toString())
+            cbTanpaBatas.isChecked = it.tanpaBatas ?: false
+            
+            spinnerProfit.setText(it.tipeKeuntungan, false)
+            
+            idKategori = it.idKategori ?: ""
+            idCabang = it.idCabang ?: ""
+            
+            if (it.statusProduk == "Tersedia (Ready)") {
+                cgStatus.check(R.id.chipReady)
+            } else {
+                cgStatus.check(R.id.chipHabis)
+            }
+        }
     }
 
     private fun initView() {
         etNama = findViewById(R.id.et_nama_produk)
         etBarcode = findViewById(R.id.et_barcode)
+        etFoto = findViewById(R.id.et_foto_produk)
         etHargaBeli = findViewById(R.id.et_harga_beli)
         etNilaiProfit = findViewById(R.id.et_nilai_profit)
         etHargaJual = findViewById(R.id.et_harga_jual)
@@ -74,8 +107,9 @@ class TambahProdukActivity : AppCompatActivity() {
         findViewById<ImageView>(R.id.ivBack).setOnClickListener { finish() }
     }
 
+    // 🔽 Dropdown kategori
     private fun loadKategori() {
-        db.getReference("Kategori").addValueEventListener(object : ValueEventListener {
+        db.getReference("kategori").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 listKategori.clear()
                 val names = mutableListOf<String>()
@@ -88,6 +122,16 @@ class TambahProdukActivity : AppCompatActivity() {
                 }
                 val adapter = ArrayAdapter(this@TambahProdukActivity, android.R.layout.simple_dropdown_item_1line, names)
                 actKategori.setAdapter(adapter)
+                
+                if (listKategori.isNotEmpty()) {
+                    if (idKategori.isEmpty()) {
+                        actKategori.setText(listKategori[0].namaKategori, false)
+                        idKategori = listKategori[0].idKategori ?: ""
+                    } else {
+                        val current = listKategori.find { it.idKategori == idKategori }
+                        current?.let { actKategori.setText(it.namaKategori, false) }
+                    }
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {}
@@ -112,6 +156,16 @@ class TambahProdukActivity : AppCompatActivity() {
                 }
                 val adapter = ArrayAdapter(this@TambahProdukActivity, android.R.layout.simple_dropdown_item_1line, names)
                 actCabang.setAdapter(adapter)
+                
+                if (listCabang.isNotEmpty()) {
+                    if (idCabang.isEmpty()) {
+                        actCabang.setText(listCabang[0].namaCabang, false)
+                        idCabang = listCabang[0].idCabang ?: ""
+                    } else {
+                        val current = listCabang.find { it.idCabang == idCabang }
+                        current?.let { actCabang.setText(it.namaCabang, false) }
+                    }
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {}
@@ -163,6 +217,7 @@ class TambahProdukActivity : AppCompatActivity() {
 
             val nama = etNama.text.toString().trim()
             val barcode = etBarcode.text.toString().trim()
+            val foto = etFoto.text.toString().trim()
             val hargaBeli = etHargaBeli.text.toString().toIntOrNull() ?: 0
             val nilaiProfit = etNilaiProfit.text.toString().toDoubleOrNull() ?: 0.0
             val hargaJual = etHargaJual.text.toString().toIntOrNull() ?: 0
@@ -171,11 +226,7 @@ class TambahProdukActivity : AppCompatActivity() {
             val tanpaBatas = cbTanpaBatas.isChecked
             
             val selectedChipId = cgStatus.checkedChipId
-            val status = if (selectedChipId != -1) {
-                findViewById<Chip>(selectedChipId).text.toString()
-            } else {
-                "Aktif"
-            }
+            val status = if (selectedChipId == R.id.chipReady) "Tersedia (Ready)" else "Habis / Nonaktif"
 
             // VALIDASI
             if (nama.isEmpty()) {
@@ -188,11 +239,12 @@ class TambahProdukActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val key = ref.push().key
+            val key = produkExisting?.idProduk ?: ref.push().key
 
             if (key != null) {
 
-                val time = System.currentTimeMillis().toString()
+                val time = produkExisting?.createdAt ?: System.currentTimeMillis().toString()
+                val updatedTime = System.currentTimeMillis().toString()
 
                 val data = modelProduk(
                     idProduk = key,
@@ -208,9 +260,9 @@ class TambahProdukActivity : AppCompatActivity() {
                     stokProduk = if (tanpaBatas) -1 else stok,
                     tanpaBatas = tanpaBatas,
                     barcode = barcode,
-                    fotoProduk = "",
+                    fotoProduk = foto,
                     createdAt = time,
-                    updatedAt = time
+                    updatedAt = updatedTime
                 )
 
                 ref.child(key).setValue(data)

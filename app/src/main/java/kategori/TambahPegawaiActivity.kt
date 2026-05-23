@@ -5,6 +5,7 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -26,10 +27,14 @@ class TambahPegawaiActivity : AppCompatActivity() {
     private lateinit var btnSimpan: Button
     private lateinit var ivBack: ImageView
 
+    private var pegawaiExisting: modelPegawai? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_tambah_pegawai)
+
+        pegawaiExisting = intent.getParcelableExtra("pegawai")
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -43,6 +48,18 @@ class TambahPegawaiActivity : AppCompatActivity() {
         cgStatus = findViewById(R.id.cgStatus)
         btnSimpan = findViewById(R.id.btnSimpan)
         ivBack = findViewById(R.id.ivBack)
+
+        if (pegawaiExisting != null) {
+            findViewById<TextView>(R.id.tvJudul).text = "Ubah Pegawai"
+            etNama.setText(pegawaiExisting?.namaPegawai)
+            etPhone.setText(pegawaiExisting?.phonePegawai)
+            actRole.setText(pegawaiExisting?.rolePegawai, false)
+            if (pegawaiExisting?.statusPegawai == "Aktif") {
+                cgStatus.check(R.id.chipAktif)
+            } else {
+                cgStatus.check(R.id.chipTidakAktif)
+            }
+        }
 
         // Set up role dropdown
         val roles = arrayOf("Staff", "Manager", "Admin", "Kasir")
@@ -75,7 +92,7 @@ class TambahPegawaiActivity : AppCompatActivity() {
 
         val database = FirebaseDatabase.getInstance()
         val myRef = database.getReference("Pegawai")
-        val id = myRef.push().key
+        val id = pegawaiExisting?.idPegawai ?: myRef.push().key
 
         val pegawai = modelPegawai(id, nama, phone, role, status)
 
