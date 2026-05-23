@@ -1,5 +1,6 @@
 package kategori
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
@@ -25,7 +26,7 @@ class DataCabangActivity : AppCompatActivity() {
         findViewById<ImageView>(R.id.ivBack).setOnClickListener { finish() }
 
         findViewById<FloatingActionButton>(R.id.fabTambah).setOnClickListener {
-            // Add branch logic
+            startActivity(Intent(this, TambahCabangActivity::class.java))
         }
     }
 }

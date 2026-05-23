@@ -9,7 +9,12 @@ import com.donald.aplikasikedua.R
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import model.modelCabang
+import model.modelKategori
 import model.modelProduk
 
 class TambahProdukActivity : AppCompatActivity() {
@@ -25,10 +30,16 @@ class TambahProdukActivity : AppCompatActivity() {
     private lateinit var etStok: TextInputEditText
 
     private lateinit var spinnerProfit: AutoCompleteTextView
+    private lateinit var actCabang: AutoCompleteTextView
+    private lateinit var actKategori: AutoCompleteTextView
     private lateinit var cbTanpaBatas: MaterialCheckBox
     private lateinit var btnSimpan: MaterialButton
 
     private var idKategori: String = ""
+    private var idCabang: String = ""
+
+    private val listKategori = mutableListOf<modelKategori>()
+    private val listCabang = mutableListOf<modelCabang>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +48,8 @@ class TambahProdukActivity : AppCompatActivity() {
         initView()
         setupDropdown()
         setupAutoHitung()
+        loadKategori()
+        loadCabang()
         setupAction()
     }
 
@@ -49,11 +62,62 @@ class TambahProdukActivity : AppCompatActivity() {
         etStok = findViewById(R.id.et_stok)
 
         spinnerProfit = findViewById(R.id.spinner_tipe_keuntungan)
+        actCabang = findViewById(R.id.actCabang)
+        actKategori = findViewById(R.id.actKategori)
         cbTanpaBatas = findViewById(R.id.cb_stok_tanpa_batas)
         btnSimpan = findViewById(R.id.btn_simpan)
+        
+        findViewById<ImageView>(R.id.ivBack).setOnClickListener { finish() }
     }
 
-    // 🔽 Dropdown keuntungan
+    private fun loadKategori() {
+        db.getReference("Kategori").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                listKategori.clear()
+                val names = mutableListOf<String>()
+                for (item in snapshot.children) {
+                    val kategori = item.getValue(modelKategori::class.java)
+                    if (kategori != null) {
+                        listKategori.add(kategori)
+                        names.add(kategori.namaKategori ?: "")
+                    }
+                }
+                val adapter = ArrayAdapter(this@TambahProdukActivity, android.R.layout.simple_dropdown_item_1line, names)
+                actKategori.setAdapter(adapter)
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+        })
+
+        actKategori.setOnItemClickListener { _, _, position, _ ->
+            idKategori = listKategori[position].idKategori ?: ""
+        }
+    }
+
+    private fun loadCabang() {
+        db.getReference("Cabang").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                listCabang.clear()
+                val names = mutableListOf<String>()
+                for (item in snapshot.children) {
+                    val cabang = item.getValue(modelCabang::class.java)
+                    if (cabang != null) {
+                        listCabang.add(cabang)
+                        names.add(cabang.namaCabang ?: "")
+                    }
+                }
+                val adapter = ArrayAdapter(this@TambahProdukActivity, android.R.layout.simple_dropdown_item_1line, names)
+                actCabang.setAdapter(adapter)
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+        })
+
+        actCabang.setOnItemClickListener { _, _, position, _ ->
+            idCabang = listCabang[position].idCabang ?: ""
+        }
+    }
+
     private fun setupDropdown() {
         val list = arrayOf("Persentase (%)", "Nominal (Rp)")
         val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, list)
@@ -61,9 +125,7 @@ class TambahProdukActivity : AppCompatActivity() {
         spinnerProfit.setText(list[0], false)
     }
 
-    // 🔢 Auto hitung harga jual
     private fun setupAutoHitung() {
-
         val watcher = object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 hitungHargaJual()
@@ -74,6 +136,7 @@ class TambahProdukActivity : AppCompatActivity() {
 
         etHargaBeli.addTextChangedListener(watcher)
         etNilaiProfit.addTextChangedListener(watcher)
+        spinnerProfit.setOnItemClickListener { _, _, _, _ -> hitungHargaJual() }
     }
 
     private fun hitungHargaJual() {

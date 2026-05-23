@@ -43,6 +43,10 @@
             android:exported="false" />
 
         <activity
+            android:name="kategori.TambahCabangActivity"
+            android:exported="false" />
+
+        <activity
             android:name="kategori.LayananActivity"
             android:exported="false" />
 

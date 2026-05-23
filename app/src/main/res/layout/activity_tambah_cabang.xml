@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_gray"
-    tools:context="kategori.TambahPegawaiActivity">
+    tools:context="kategori.TambahCabangActivity">
 
     <!-- Header -->
     <LinearLayout
@@ -39,7 +39,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tambah Pegawai"
+                    android:text="Tambah Cabang"
                     android:textColor="@color/white"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -47,7 +47,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TokoKita Team Management"
+                    android:text="TokoKita Network"
                     android:textColor="@color/brand_cream"
                     android:textSize="12sp" />
             </LinearLayout>
@@ -68,13 +68,12 @@
             android:paddingHorizontal="24dp"
             android:paddingBottom="32dp">
 
-            <!-- Profile Info Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                app:cardCornerRadius="24dp"
-                app:cardElevation="4dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="2dp"
                 app:cardBackgroundColor="@color/surface_white">
 
                 <LinearLayout
@@ -83,43 +82,17 @@
                     android:orientation="vertical"
                     android:padding="24dp">
 
-                    <!-- Avatar Upload -->
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:layout_gravity="center"
-                        android:layout_marginBottom="24dp"
-                        app:cardCornerRadius="50dp"
-                        app:cardElevation="0dp"
-                        app:strokeWidth="1dp"
-                        app:strokeColor="#E0E0E0">
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:scaleType="centerInside"
-                            android:src="@drawable/account"
-                            app:tint="@color/background_gray" />
-                        <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:layout_gravity="bottom|end"
-                            android:background="@color/primary_teal"
-                            android:padding="8dp"
-                            android:src="@android:drawable/ic_menu_camera"
-                            app:tint="@color/white" />
-                    </com.google.android.material.card.MaterialCardView>
-
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Nama Lengkap"
+                        android:hint="Nama Cabang"
                         app:boxCornerRadiusTopStart="12dp"
                         app:boxCornerRadiusTopEnd="12dp"
                         app:boxCornerRadiusBottomStart="12dp"
                         app:boxCornerRadiusBottomEnd="12dp">
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etNama"
+                            android:id="@+id/etNamaCabang"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -129,16 +102,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:hint="Nomor Telepon"
+                        android:hint="Alamat Cabang"
                         app:boxCornerRadiusTopStart="12dp"
                         app:boxCornerRadiusTopEnd="12dp"
                         app:boxCornerRadiusBottomStart="12dp"
                         app:boxCornerRadiusBottomEnd="12dp">
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etPhone"
+                            android:id="@+id/etAlamatCabang"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="phone" />
+                            android:layout_height="wrap_content" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -146,57 +118,27 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:hint="Jabatan / Role"
+                        android:hint="Status Cabang"
                         app:boxCornerRadiusTopStart="12dp"
                         app:boxCornerRadiusTopEnd="12dp"
                         app:boxCornerRadiusBottomStart="12dp"
                         app:boxCornerRadiusBottomEnd="12dp">
                         <AutoCompleteTextView
-                            android:id="@+id/actRole"
+                            android:id="@+id/actStatus"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="none"
-                            android:text="Staff" />
+                            android:text="Cabang" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="Status Akun"
-                android:textColor="@color/primary_teal"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/cgStatus"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                app:singleSelection="true">
-                <com.google.android.material.chip.Chip
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Aktif"
-                    android:checked="true"
-                    app:chipBackgroundColor="@color/primary_teal"
-                    android:textColor="@color/white" />
-                <com.google.android.material.chip.Chip
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tidak Aktif" />
-            </com.google.android.material.chip.ChipGroup>
 
             <Button
                 android:id="@+id/btnSimpan"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_marginTop="32dp"
-                android:text="Simpan Data"
+                android:text="Simpan Cabang"
                 android:textAllCaps="false"
                 android:textSize="16sp"
                 android:textStyle="bold"
