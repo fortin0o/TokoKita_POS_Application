@@ -25,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import java.util.*
 
 // --- Design Tokens ---
 val PrimaryTeal = Color(0xFF0D5C6A)
@@ -50,6 +51,16 @@ fun POSTheme(content: @Composable () -> Unit) {
 // --- 1. Dashboard Layout ---
 @Composable
 fun DashboardScreen() {
+    val calendar = Calendar.getInstance()
+    val hour = calendar.get(Calendar.HOUR_OF_DAY)
+    val greeting = when (hour) {
+        in 0..11 -> "Selamat Pagi"
+        in 12..14 -> "Selamat Siang"
+        in 15..18 -> "Selamat Sore"
+        else -> "Selamat Malam"
+    }
+    val userName = "Donald" // Placeholder
+
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
@@ -82,7 +93,7 @@ fun DashboardScreen() {
                     }
                     Spacer(modifier = Modifier.height(24.dp))
                     Text(
-                        text = "Selamat Sore, Shakilla!",
+                        text = "$greeting, $userName!",
                         color = Color.White,
                         fontSize = 22.sp,
                         fontWeight = FontWeight.Bold

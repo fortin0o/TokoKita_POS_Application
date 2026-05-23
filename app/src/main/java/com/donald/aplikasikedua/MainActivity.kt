@@ -3,12 +3,14 @@ package com.donald.aplikasikedua
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kategori.*
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,6 +18,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+
+        // Set Dynamic Greeting
+        updateGreeting()
 
         // Handle padding system UI
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -77,6 +82,23 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.ivProfile).setOnClickListener {
             showProfileBottomSheet()
         }
+    }
+
+    private fun updateGreeting() {
+        val tvGreeting = findViewById<TextView>(R.id.tvGreeting)
+        val calendar = Calendar.getInstance()
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+
+        val greetingText = when (hour) {
+            in 0..11 -> "Selamat Pagi"
+            in 12..14 -> "Selamat Siang"
+            in 15..18 -> "Selamat Sore"
+            else -> "Selamat Malam"
+        }
+
+        // You can replace "Donald" with logic to fetch from Firebase/SharedPreferences
+        val userName = "Donald" 
+        tvGreeting.text = "$greetingText, $userName!"
     }
 
     private fun showProfileBottomSheet() {
