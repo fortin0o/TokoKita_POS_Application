@@ -30,6 +30,38 @@
             android:name="kategori.TambahProdukActivity"
             android:exported="false" />
 
+        <activity
+            android:name="kategori.DataPegawaiActivity"
+            android:exported="false" />
+
+        <activity
+            android:name="kategori.TambahPegawaiActivity"
+            android:exported="false" />
+
+        <activity
+            android:name="kategori.DataCabangActivity"
+            android:exported="false" />
+
+        <activity
+            android:name="kategori.LayananActivity"
+            android:exported="false" />
+
+        <activity
+            android:name="kategori.PrinterActivity"
+            android:exported="false" />
+
+        <activity
+            android:name="kategori.DataTransaksiActivity"
+            android:exported="false" />
+
+        <activity
+            android:name="kategori.DataPelangganActivity"
+            android:exported="false" />
+
+        <activity
+            android:name="kategori.LaporanActivity"
+            android:exported="false" />
+
         <!-- MAIN -->
         <activity
             android:name=".MainActivity"
