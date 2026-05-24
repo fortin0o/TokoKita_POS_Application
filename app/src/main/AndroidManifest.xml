@@ -67,6 +67,10 @@
             android:exported="false" />
 
         <activity
+            android:name="kategori.TambahPelangganActivity"
+            android:exported="false" />
+
+        <activity
             android:name="kategori.LaporanActivity"
             android:exported="false" />
 

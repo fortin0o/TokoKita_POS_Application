@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         updateGreeting()
         loadTodayRevenue()
         
-        findViewById<View>(R.id.tvCurrentCabang).setOnClickListener { showCabangSelector() }
+        findViewById<View>(R.id.cardCabangSelector).setOnClickListener { showCabangSelector() }
 
         // Handle padding system UI
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->

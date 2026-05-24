@@ -12,6 +12,7 @@ import com.google.android.material.chip.ChipGroup
 import com.google.firebase.database.*
 import model.modelCartItem
 import model.modelPegawai
+import model.modelPelanggan
 import model.modelTransaksi
 import java.text.SimpleDateFormat
 import java.util.*
@@ -30,10 +31,13 @@ class CheckoutActivity : AppCompatActivity() {
 
     private val db = FirebaseDatabase.getInstance()
     private val listPegawai = mutableListOf<modelPegawai>()
+    private val listPelanggan = mutableListOf<modelPelanggan>()
     
     private var namaToko = "TokoKita"
     private var headerStruk = ""
     private var footerStruk = ""
+
+    private var selectedPelangganId: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +57,7 @@ class CheckoutActivity : AppCompatActivity() {
         initView()
         loadSettings()
         loadPegawai()
-        // Pelanggan logic could be added here similarly
+        loadPelanggan()
         
         tvTotal.text = "Rp %,d".format(totalHarga)
         
@@ -101,6 +105,34 @@ class CheckoutActivity : AppCompatActivity() {
         })
     }
 
+    private fun loadPelanggan() {
+        db.getReference("Pelanggan").addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                listPelanggan.clear()
+                val names = mutableListOf<String>()
+                names.add("Umum / Walk-in")
+                for (snap in snapshot.children) {
+                    val p = snap.getValue(modelPelanggan::class.java)
+                    if (p != null && p.statusPelanggan == "Aktif") {
+                        listPelanggan.add(p)
+                        names.add(p.namaPelanggan ?: "")
+                    }
+                }
+                val adapter = ArrayAdapter(this@CheckoutActivity, android.R.layout.simple_dropdown_item_1line, names)
+                actPelanggan.setAdapter(adapter)
+            }
+            override fun onCancelled(error: DatabaseError) {}
+        })
+
+        actPelanggan.setOnItemClickListener { _, _, position, _ ->
+            if (position == 0) {
+                selectedPelangganId = ""
+            } else {
+                selectedPelangganId = listPelanggan[position - 1].idPelanggan ?: ""
+            }
+        }
+    }
+
     private fun saveTransaction() {
         val kasirName = actKasir.text.toString()
         if (kasirName == "Pilih Kasir" || kasirName.isEmpty()) {
@@ -110,6 +142,7 @@ class CheckoutActivity : AppCompatActivity() {
 
         val selectedMetodeId = cgMetode.checkedChipId
         val metode = findViewById<Chip>(selectedMetodeId).text.toString()
+        val pelangganName = actPelanggan.text.toString()
 
         val ref = db.getReference("transaksi")
         val id = ref.push().key ?: return
@@ -124,6 +157,8 @@ class CheckoutActivity : AppCompatActivity() {
             tanggal = date,
             idCabang = activeCabangId,
             namaPegawai = kasirName,
+            idPelanggan = selectedPelangganId,
+            namaPelanggan = pelangganName,
             metodePembayaran = metode
         )
 
@@ -158,6 +193,9 @@ class CheckoutActivity : AppCompatActivity() {
         if (headerStruk.isNotEmpty()) sb.append("$headerStruk\n")
         sb.append("Tanggal: ${transaksi.tanggal}\n")
         sb.append("Kasir: ${transaksi.namaPegawai}\n")
+        if (transaksi.namaPelanggan != "Umum / Walk-in") {
+            sb.append("Pelanggan: ${transaksi.namaPelanggan}\n")
+        }
         sb.append("Metode: ${transaksi.metodePembayaran}\n")
         sb.append("----------------------------\n")
         transaksi.listProduk?.forEach {

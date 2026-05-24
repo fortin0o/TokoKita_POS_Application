@@ -60,15 +60,17 @@
                 android:text="0812-3456-7890"
                 android:textColor="@color/text_gray"
                 android:textSize="12sp" />
-            <TextView
-                android:id="@+id/tvPoin"
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipStatus"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="150 Poin"
-                android:textColor="@color/primary_teal"
+                android:layout_height="32dp"
+                android:layout_marginTop="4dp"
+                android:text="Aktif"
                 android:textSize="10sp"
-                android:textStyle="bold" />
+                app:chipStrokeWidth="0dp"
+                android:clickable="false"
+                android:focusable="false" />
         </LinearLayout>
 
         <LinearLayout

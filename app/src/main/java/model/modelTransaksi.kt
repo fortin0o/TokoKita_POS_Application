@@ -11,6 +11,8 @@ data class modelTransaksi(
     var subtotal: Int = 0,
     var idPegawai: String? = null,
     var namaPegawai: String? = null,
+    var idPelanggan: String? = null,
+    var namaPelanggan: String? = null,
     var idCabang: String? = null,
     var tanggal: String? = null,
     var metodePembayaran: String? = "Tunai",
@@ -27,6 +29,8 @@ data class modelTransaksi(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
         parcel.readString()
     )
 
@@ -38,6 +42,8 @@ data class modelTransaksi(
         parcel.writeInt(subtotal)
         parcel.writeString(idPegawai)
         parcel.writeString(namaPegawai)
+        parcel.writeString(idPelanggan)
+        parcel.writeString(namaPelanggan)
         parcel.writeString(idCabang)
         parcel.writeString(tanggal)
         parcel.writeString(metodePembayaran)
