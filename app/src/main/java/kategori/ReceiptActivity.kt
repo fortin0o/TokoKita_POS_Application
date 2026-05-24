@@ -31,6 +31,7 @@ class ReceiptActivity : AppCompatActivity() {
     private lateinit var tvFooter: TextView
     private lateinit var btnSelesai: Button
     private lateinit var btnBagikan: Button
+    private lateinit var btnCetak: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +61,10 @@ class ReceiptActivity : AppCompatActivity() {
         btnBagikan.setOnClickListener {
             Toast.makeText(this, "Membagikan struk...", Toast.LENGTH_SHORT).show()
         }
+
+        btnCetak.setOnClickListener {
+            Toast.makeText(this, "Mencetak struk...", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun initView() {
@@ -80,6 +85,7 @@ class ReceiptActivity : AppCompatActivity() {
         tvFooter = findViewById(R.id.tvFooter)
         btnSelesai = findViewById(R.id.btnSelesai)
         btnBagikan = findViewById(R.id.btnBagikan)
+        btnCetak = findViewById(R.id.btnCetak)
     }
 
     private fun loadSettings() {

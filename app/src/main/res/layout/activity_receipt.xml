@@ -315,23 +315,44 @@
             android:text="BAGIKAN"
             android:textAllCaps="false"
             android:textColor="@color/primary_teal"
+            android:textSize="12sp"
             app:cornerRadius="12dp"
             app:icon="@android:drawable/ic_menu_share"
             app:iconTint="@color/primary_teal"
             app:strokeColor="@color/primary_teal" />
 
         <View
-            android:layout_width="16dp"
+            android:layout_width="12dp"
+            android:layout_height="match_parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCetak"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:text="CETAK"
+            android:textAllCaps="false"
+            android:textColor="@color/primary_teal"
+            android:textSize="12sp"
+            app:cornerRadius="12dp"
+            app:icon="@android:drawable/ic_menu_agenda"
+            app:iconTint="@color/primary_teal"
+            app:strokeColor="@color/primary_teal" />
+
+        <View
+            android:layout_width="12dp"
             android:layout_height="match_parent" />
 
         <Button
             android:id="@+id/btnSelesai"
             android:layout_width="0dp"
             android:layout_height="56dp"
-            android:layout_weight="1"
+            android:layout_weight="1.2"
             android:backgroundTint="@color/primary_teal"
             android:text="SELESAI"
             android:textAllCaps="false"
+            android:textSize="12sp"
             android:textStyle="bold"
             app:cornerRadius="12dp" />
     </LinearLayout>
