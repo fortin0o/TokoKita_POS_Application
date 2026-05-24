@@ -9,18 +9,26 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.database.*
 import kategori.*
+import model.modelTransaksi
+import java.text.SimpleDateFormat
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var tvRevenue: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
+        tvRevenue = findViewById(R.id.tvRevenue)
+
         // Set Dynamic Greeting
         updateGreeting()
+        loadTodayRevenue()
 
         // Handle padding system UI
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -86,6 +94,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateGreeting() {
         val tvGreeting = findViewById<TextView>(R.id.tvGreeting)
+        val tvDate = findViewById<TextView>(R.id.tvDate)
         val calendar = Calendar.getInstance()
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
 
@@ -96,9 +105,31 @@ class MainActivity : AppCompatActivity() {
             else -> "Selamat Malam"
         }
 
-        // You can replace "TokoKita" with logic to fetch from Firebase/SharedPreferences
+        val sdf = SimpleDateFormat("dd MMMM yyyy", Locale("id", "ID"))
+        tvDate.text = sdf.format(Date())
+
         val userName = "TokoKita"
         tvGreeting.text = "$greetingText, $userName!"
+    }
+
+    private fun loadTodayRevenue() {
+        val today = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+        val ref = FirebaseDatabase.getInstance().getReference("transaksi")
+        
+        ref.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                var total = 0
+                for (snap in snapshot.children) {
+                    val trx = snap.getValue(modelTransaksi::class.java)
+                    if (trx != null && trx.tanggal?.startsWith(today) == true) {
+                        total += trx.totalHarga
+                    }
+                }
+                tvRevenue.text = "Rp %,d".format(total)
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+        })
     }
 
     private fun showProfileBottomSheet() {

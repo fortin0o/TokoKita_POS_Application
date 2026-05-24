@@ -225,20 +225,52 @@ class DataTransaksiActivity : AppCompatActivity() {
             totalHarga = subtotal,
             diskon = 0,
             tanggal = date,
-            namaPegawai = "Kasir" // Placeholder
+            namaPegawai = "Kasir"
         )
 
         ref.child(id).setValue(transaksi).addOnSuccessListener {
-            // Deduct Stock
             updateStock()
+            showReceipt(transaksi)
             
-            Toast.makeText(this, "Transaksi Berhasil", Toast.LENGTH_LONG).show()
             listCart.clear()
             adapterCart.notifyDataSetChanged()
             updateSummary()
         }.addOnFailureListener {
             Toast.makeText(this, "Transaksi Gagal", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun showReceipt(transaksi: modelTransaksi) {
+        val dialog = android.app.Dialog(this)
+        dialog.setContentView(R.layout.dialog_receipt)
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        
+        val tvContent = dialog.findViewById<TextView>(R.id.tvReceiptContent)
+        val btnCetak = dialog.findViewById<Button>(R.id.btnCetak)
+        val btnTutup = dialog.findViewById<Button>(R.id.btnTutup)
+        
+        val sb = StringBuilder()
+        sb.append("TokoKita POS\n")
+        sb.append("Tanggal: ${transaksi.tanggal}\n")
+        sb.append("----------------------------\n")
+        transaksi.listProduk?.forEach {
+            sb.append("${it.produk?.namaProduk?.padEnd(15)} x${it.jumlah}  Rp %,d\n".format((it.produk?.hargaJual ?: 0) * it.jumlah))
+        }
+        sb.append("----------------------------\n")
+        sb.append("Total:           Rp %,d\n".format(transaksi.totalHarga))
+        sb.append("----------------------------\n")
+        sb.append("Terima Kasih!")
+        
+        tvContent.text = sb.toString()
+        
+        btnCetak.setOnClickListener {
+            Toast.makeText(this, "Mencetak struk...", Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
+        }
+        
+        btnTutup.setOnClickListener { dialog.dismiss() }
+        
+        dialog.show()
     }
 
     private fun updateStock() {
