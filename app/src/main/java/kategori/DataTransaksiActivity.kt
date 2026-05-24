@@ -154,7 +154,10 @@ class DataTransaksiActivity : AppCompatActivity() {
         val query = svProduk.query.toString().lowercase()
         val filtered = listProduk.filter { produk ->
             val matchKategori = selectedKategoriId == "Semua" || produk.idKategori == selectedKategoriId
-            val matchCabang = activeCabangId.isEmpty() || produk.idCabang == activeCabangId
+            
+            // Logic Fix: Product shows if it matches active branch OR if it is set to "Semua Cabang" (idCabang is empty)
+            val matchCabang = activeCabangId.isEmpty() || produk.idCabang == activeCabangId || produk.idCabang.isNullOrEmpty()
+
             val matchSearch = produk.namaProduk?.lowercase()?.contains(query) == true || produk.barcode?.lowercase()?.contains(query) == true
             matchKategori && matchCabang && matchSearch
         }

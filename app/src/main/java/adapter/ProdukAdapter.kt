@@ -36,6 +36,14 @@ class ProdukAdapter(private val list: ArrayList<modelProduk>) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val data = list[position]
 
+        val tvCabang: TextView? = holder.itemView.findViewById(R.id.tvCabangBadge)
+        if (data.idCabang.isNullOrEmpty()) {
+            tvCabang?.visibility = View.VISIBLE
+            tvCabang?.text = "Tersedia di Semua Cabang"
+        } else {
+            tvCabang?.visibility = View.GONE
+        }
+
         // ✅ Nama Produk
         holder.nama.text = data.namaProduk ?: "-"
 
