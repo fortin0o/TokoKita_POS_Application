@@ -17,71 +17,79 @@
 
         <ImageView
             android:id="@+id/img_produk"
-            android:layout_width="84dp"
-            android:layout_height="84dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:scaleType="centerCrop"
             android:src="@color/material_dynamic_neutral90"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tv_nama_produk"
+        <LinearLayout
+            android:id="@+id/contentLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Nama Produk"
-            android:textStyle="bold"
-            android:textSize="16sp"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="8dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/img_produk"
-            app:layout_constraintTop_toTopOf="@id/img_produk"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/tv_harga_produk"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Harga"
-            android:textStyle="bold"
-            android:textSize="14sp"
-            android:layout_marginTop="4dp"
-            app:layout_constraintStart_toStartOf="@id/tv_nama_produk"
-            app:layout_constraintTop_toBottomOf="@id/tv_nama_produk"
-            app:layout_constraintEnd_toEndOf="@id/tv_nama_produk"/>
+            <TextView
+                android:id="@+id/tv_nama_produk"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nama Produk"
+                android:textColor="@color/text_dark"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_harga_produk"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="Harga"
+                android:textColor="@color/primary_brand"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvCabangBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Tersedia di Semua Cabang"
+                android:textColor="@color/primary_teal"
+                android:textSize="11sp"
+                android:textStyle="italic"
+                android:visibility="gone" />
+        </LinearLayout>
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_status"
             android:layout_width="wrap_content"
             android:layout_height="32dp"
+            android:layout_marginTop="8dp"
+            android:clickable="false"
+            android:focusable="false"
             android:text="Aktif"
             android:textSize="10sp"
             app:chipStrokeWidth="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/contentLayout" />
 
         <ImageView
             android:id="@+id/ivDelete"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginTop="8dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginTop="12dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="4dp"
             android:src="@android:drawable/ic_menu_delete"
-            app:tint="@color/red"
-            app:layout_constraintTop_toBottomOf="@id/tv_harga_produk"
-            app:layout_constraintStart_toStartOf="@id/tv_nama_produk" />
-
-        <TextView
-            android:id="@+id/tvCabangBadge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="Global"
-            android:textColor="@color/primary_teal"
-            android:textSize="10sp"
-            android:textStyle="italic"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@id/ivDelete"
-            app:layout_constraintStart_toEndOf="@id/ivDelete"
-            app:layout_constraintTop_toTopOf="@id/ivDelete" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/contentLayout"
+            app:layout_constraintTop_toBottomOf="@id/contentLayout"
+            app:tint="@color/red" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

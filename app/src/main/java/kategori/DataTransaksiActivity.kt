@@ -30,7 +30,9 @@ class DataTransaksiActivity : AppCompatActivity() {
     private lateinit var svProduk: SearchView
     private lateinit var cgKategori: ChipGroup
     private lateinit var rvProdukSelection: RecyclerView
-    private lateinit var fabCart: com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+    private lateinit var fabCart: com.google.android.material.card.MaterialCardView
+    private lateinit var tvFabItems: TextView
+    private lateinit var tvFabTotal: TextView
 
     private lateinit var adapterProduk: ProdukTransaksiAdapter
     private lateinit var adapterCart: CartAdapter
@@ -72,6 +74,8 @@ class DataTransaksiActivity : AppCompatActivity() {
         cgKategori = findViewById(R.id.cgKategori)
         rvProdukSelection = findViewById(R.id.rvProdukSelection)
         fabCart = findViewById(R.id.fabCart)
+        tvFabItems = findViewById(R.id.tvFabItems)
+        tvFabTotal = findViewById(R.id.tvFabTotal)
         
         findViewById<ImageView>(R.id.ivBack).setOnClickListener { finish() }
         findViewById<ImageView>(R.id.ivHistory).setOnClickListener {
@@ -192,8 +196,15 @@ class DataTransaksiActivity : AppCompatActivity() {
             total += (item.produk?.hargaJual ?: 0) * item.jumlah
             count += item.jumlah
         }
-        fabCart.text = "$count Items - Rp %,d".format(total)
-        if (count > 0) fabCart.show() else fabCart.hide()
+        
+        tvFabItems.text = "$count Items"
+        tvFabTotal.text = "Rp %,d".format(total)
+        
+        if (count > 0) {
+            fabCart.visibility = android.view.View.VISIBLE
+        } else {
+            fabCart.visibility = android.view.View.GONE
+        }
     }
 
     private fun setupActions() {
