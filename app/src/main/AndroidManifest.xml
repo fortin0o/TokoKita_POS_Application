@@ -51,7 +51,7 @@
             android:exported="false" />
 
         <activity
-            android:name="kategori.LayananActivity"
+            android:name="kategori.CheckoutActivity"
             android:exported="false" />
 
         <activity

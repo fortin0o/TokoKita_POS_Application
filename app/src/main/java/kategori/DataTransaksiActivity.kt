@@ -30,11 +30,7 @@ class DataTransaksiActivity : AppCompatActivity() {
     private lateinit var svProduk: SearchView
     private lateinit var cgKategori: ChipGroup
     private lateinit var rvProdukSelection: RecyclerView
-    private lateinit var rvCart: RecyclerView
-    private lateinit var tvTotal: TextView
-    private lateinit var tvCountItem: TextView
-    private lateinit var btnBayar: Button
-    private lateinit var btnHapus: Button
+    private lateinit var fabCart: com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 
     private lateinit var adapterProduk: ProdukTransaksiAdapter
     private lateinit var adapterCart: CartAdapter
@@ -45,10 +41,6 @@ class DataTransaksiActivity : AppCompatActivity() {
     private val db = FirebaseDatabase.getInstance()
     private var selectedKategoriId: String = "Semua"
     private var activeCabangId: String = ""
-
-    private var namaToko: String = "TokoKita"
-    private var headerStruk: String = ""
-    private var footerStruk: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,7 +56,6 @@ class DataTransaksiActivity : AppCompatActivity() {
         activeCabangId = getSharedPreferences("TokoKita", MODE_PRIVATE).getString("cabangId", "") ?: ""
 
         initView()
-        loadSettings()
         setupRecyclerViews()
         loadKategori()
         loadProduk()
@@ -76,43 +67,24 @@ class DataTransaksiActivity : AppCompatActivity() {
         svProduk = findViewById(R.id.svProduk)
         cgKategori = findViewById(R.id.cgKategori)
         rvProdukSelection = findViewById(R.id.rvProdukSelection)
-        rvCart = findViewById(R.id.rvCart)
-        tvTotal = findViewById(R.id.tvTotal)
-        tvCountItem = findViewById(R.id.tvCountItem)
+        fabCart = findViewById(R.id.fabCart)
         
-        btnBayar = findViewById(R.id.btnBayar)
-        btnHapus = findViewById(R.id.btnHapus)
         findViewById<ImageView>(R.id.ivBack).setOnClickListener { finish() }
         findViewById<ImageView>(R.id.ivHistory).setOnClickListener {
             startActivity(Intent(this, LaporanActivity::class.java))
         }
     }
 
-    private fun loadSettings() {
-        db.getReference("Settings").addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()) {
-                    namaToko = snapshot.child("namaToko").value?.toString() ?: "TokoKita"
-                    headerStruk = snapshot.child("headerStruk").value?.toString() ?: ""
-                    footerStruk = snapshot.child("footerStruk").value?.toString() ?: ""
-                }
-            }
-            override fun onCancelled(error: DatabaseError) {}
-        })
-    }
-
     private fun setupRecyclerViews() {
         adapterProduk = ProdukTransaksiAdapter(emptyList()) { produk ->
             addToCart(produk)
         }
-        rvProdukSelection.layoutManager = GridLayoutManager(this, 2)
+        rvProdukSelection.layoutManager = GridLayoutManager(this, if (resources.configuration.orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE) 4 else 2)
         rvProdukSelection.adapter = adapterProduk
-
+        
         adapterCart = CartAdapter(listCart) {
-            updateSummary()
+            updateCartUI()
         }
-        rvCart.layoutManager = LinearLayoutManager(this)
-        rvCart.adapter = adapterCart
     }
 
     private fun loadKategori() {
@@ -120,7 +92,6 @@ class DataTransaksiActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 cgKategori.removeAllViews()
                 
-                // Add "Semua" chip
                 val chipSemua = Chip(this@DataTransaksiActivity)
                 chipSemua.text = "Semua"
                 chipSemua.isCheckable = true
@@ -193,114 +164,78 @@ class DataTransaksiActivity : AppCompatActivity() {
         } else {
             listCart.add(modelCartItem(produk, 1))
         }
-        adapterCart.notifyDataSetChanged()
-        updateSummary()
+        updateCartUI()
     }
 
-    private fun updateSummary() {
-        var subtotalVal = 0
+    private fun updateCartUI() {
+        var total = 0
         var count = 0
         for (item in listCart) {
-            subtotalVal += (item.produk?.hargaJual ?: 0) * item.jumlah
+            total += (item.produk?.hargaJual ?: 0) * item.jumlah
             count += item.jumlah
         }
-
-        tvTotal.text = "Rp %,d".format(subtotalVal)
-        tvCountItem.text = "$count item"
+        fabCart.text = "$count Items - Rp %,d".format(total)
+        if (count > 0) fabCart.show() else fabCart.hide()
     }
 
     private fun setupActions() {
+        fabCart.setOnClickListener {
+            showCartBottomSheet()
+        }
+    }
+
+    private fun showCartBottomSheet() {
+        val dialog = com.google.android.material.bottomsheet.BottomSheetDialog(this)
+        val view = layoutInflater.inflate(R.layout.layout_cart_bottom_sheet, null)
+        
+        val rv = view.findViewById<RecyclerView>(R.id.rvCart)
+        val tvTotal = view.findViewById<TextView>(R.id.tvTotal)
+        val btnCheckout = view.findViewById<Button>(R.id.btnCheckout)
+        val btnHapus = view.findViewById<Button>(R.id.btnHapus)
+
+        rv.layoutManager = LinearLayoutManager(this)
+        rv.adapter = adapterCart
+        
+        fun refreshPopup() {
+            var total = 0
+            for (item in listCart) {
+                total += (item.produk?.hargaJual ?: 0) * item.jumlah
+            }
+            tvTotal.text = "Rp %,d".format(total)
+            if (listCart.isEmpty()) dialog.dismiss()
+            updateCartUI()
+        }
+        
+        refreshPopup()
+
         btnHapus.setOnClickListener {
             listCart.clear()
             adapterCart.notifyDataSetChanged()
-            updateSummary()
-        }
-
-        btnBayar.setOnClickListener {
-            if (listCart.isEmpty()) {
-                Toast.makeText(this, "Keranjang kosong", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-            saveTransaction()
-        }
-    }
-
-    private fun saveTransaction() {
-        val ref = db.getReference("transaksi")
-        val id = ref.push().key ?: return
-        
-        var subtotal = 0
-        for (item in listCart) {
-            subtotal += (item.produk?.hargaJual ?: 0) * item.jumlah
-        }
-
-        val date = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
-        
-        val transaksi = modelTransaksi(
-            idTransaksi = id,
-            listProduk = listCart.toList(),
-            subtotal = subtotal,
-            totalHarga = subtotal,
-            diskon = 0,
-            tanggal = date,
-            idCabang = activeCabangId,
-            namaPegawai = "Kasir"
-        )
-
-        ref.child(id).setValue(transaksi).addOnSuccessListener {
-            updateStock()
-            showReceipt(transaksi)
-            
-            listCart.clear()
-            adapterCart.notifyDataSetChanged()
-            updateSummary()
-        }.addOnFailureListener {
-            Toast.makeText(this, "Transaksi Gagal", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun showReceipt(transaksi: modelTransaksi) {
-        val dialog = android.app.Dialog(this)
-        dialog.setContentView(R.layout.dialog_receipt)
-        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-        
-        val tvContent = dialog.findViewById<TextView>(R.id.tvReceiptContent)
-        val btnCetak = dialog.findViewById<Button>(R.id.btnCetak)
-        val btnTutup = dialog.findViewById<Button>(R.id.btnTutup)
-        
-        val sb = StringBuilder()
-        sb.append("$namaToko\n")
-        if (headerStruk.isNotEmpty()) sb.append("$headerStruk\n")
-        sb.append("Tanggal: ${transaksi.tanggal}\n")
-        sb.append("----------------------------\n")
-        transaksi.listProduk?.forEach {
-            sb.append("${it.produk?.namaProduk?.padEnd(15)} x${it.jumlah}  Rp %,d\n".format((it.produk?.hargaJual ?: 0) * it.jumlah))
-        }
-        sb.append("----------------------------\n")
-        sb.append("Total:           Rp %,d\n".format(transaksi.totalHarga))
-        sb.append("----------------------------\n")
-        if (footerStruk.isNotEmpty()) sb.append("$footerStruk\n")
-        else sb.append("Terima Kasih!\n")
-        
-        tvContent.text = sb.toString()
-        
-        btnCetak.setOnClickListener {
-            Toast.makeText(this, "Mencetak struk...", Toast.LENGTH_SHORT).show()
+            updateCartUI()
             dialog.dismiss()
         }
-        
-        btnTutup.setOnClickListener { dialog.dismiss() }
-        
+
+        btnCheckout.setOnClickListener {
+            dialog.dismiss()
+            val intent = Intent(this, CheckoutActivity::class.java)
+            intent.putParcelableArrayListExtra("cart", ArrayList(listCart))
+            var total = 0
+            for (item in listCart) total += (item.produk?.hargaJual ?: 0) * item.jumlah
+            intent.putExtra("total", total)
+            intent.putExtra("cabangId", activeCabangId)
+            startActivityForResult(intent, 100)
+        }
+
+        dialog.setContentView(view)
         dialog.show()
     }
 
-    private fun updateStock() {
-        for (item in listCart) {
-            val produk = item.produk ?: continue
-            if (produk.tanpaBatas == true) continue
-            
-            val newStok = (produk.stokProduk ?: 0) - item.jumlah
-            db.getReference("produk").child(produk.idProduk!!).child("stokProduk").setValue(newStok)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 100 && resultCode == RESULT_OK) {
+            listCart.clear()
+            adapterCart.notifyDataSetChanged()
+            updateCartUI()
         }
     }
 }

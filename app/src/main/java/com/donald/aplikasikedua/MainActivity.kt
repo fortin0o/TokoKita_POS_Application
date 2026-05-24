@@ -72,11 +72,6 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, DataCabangActivity::class.java))
         }
 
-        // 5. Layanan
-        findViewById<View>(R.id.cardLayanan).setOnClickListener {
-            startActivity(Intent(this, LayananActivity::class.java))
-        }
-
         // 6. Printer
         findViewById<View>(R.id.cardPrinter).setOnClickListener {
             startActivity(Intent(this, PrinterActivity::class.java))
