@@ -42,6 +42,10 @@ class DataTransaksiActivity : AppCompatActivity() {
     private var selectedKategoriId: String = "Semua"
     private var activeCabangId: String = ""
 
+    private var selectedKasirName: String = ""
+    private var selectedPelangganId: String = ""
+    private var selectedPelangganName: String = "Umum"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -192,9 +196,60 @@ class DataTransaksiActivity : AppCompatActivity() {
         val tvTotal = view.findViewById<TextView>(R.id.tvTotal)
         val btnCheckout = view.findViewById<Button>(R.id.btnCheckout)
         val btnHapus = view.findViewById<Button>(R.id.btnHapus)
+        val actKasir = view.findViewById<AutoCompleteTextView>(R.id.actKasir)
+        val actPelanggan = view.findViewById<AutoCompleteTextView>(R.id.actPelanggan)
 
         rv.layoutManager = LinearLayoutManager(this)
         rv.adapter = adapterCart
+
+        // Load Kasir
+        db.getReference("Pegawai").addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val names = mutableListOf<String>()
+                for (snap in snapshot.children) {
+                    val p = snap.getValue(model.modelPegawai::class.java)
+                    if (p != null && p.statusPegawai == "Aktif") names.add(p.namaPegawai ?: "")
+                }
+                val adapter = ArrayAdapter(this@DataTransaksiActivity, android.R.layout.simple_dropdown_item_1line, names)
+                actKasir.setAdapter(adapter)
+                if (selectedKasirName.isNotEmpty()) actKasir.setText(selectedKasirName, false)
+            }
+            override fun onCancelled(error: DatabaseError) {}
+        })
+
+        // Load Pelanggan
+        db.getReference("Pelanggan").addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val listP = mutableListOf<model.modelPelanggan>()
+                val names = mutableListOf<String>()
+                names.add("Umum")
+                for (snap in snapshot.children) {
+                    val p = snap.getValue(model.modelPelanggan::class.java)
+                    if (p != null && p.statusPelanggan == "Aktif") {
+                        listP.add(p)
+                        names.add(p.namaPelanggan ?: "")
+                    }
+                }
+                val adapter = ArrayAdapter(this@DataTransaksiActivity, android.R.layout.simple_dropdown_item_1line, names)
+                actPelanggan.setAdapter(adapter)
+                actPelanggan.setText(selectedPelangganName, false)
+
+                actPelanggan.setOnItemClickListener { _, _, pos, _ ->
+                    if (pos == 0) {
+                        selectedPelangganId = ""
+                        selectedPelangganName = "Umum"
+                    } else {
+                        selectedPelangganId = listP[pos - 1].idPelanggan ?: ""
+                        selectedPelangganName = listP[pos - 1].namaPelanggan ?: "Umum"
+                    }
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {}
+        })
+
+        actKasir.setOnItemClickListener { _, _, _, _ ->
+            selectedKasirName = actKasir.text.toString()
+        }
         
         fun refreshPopup() {
             var total = 0
@@ -216,6 +271,11 @@ class DataTransaksiActivity : AppCompatActivity() {
         }
 
         btnCheckout.setOnClickListener {
+            if (selectedKasirName.isEmpty() || selectedKasirName == "Kasir") {
+                Toast.makeText(this, "Pilih Kasir terlebih dahulu", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             dialog.dismiss()
             val intent = Intent(this, CheckoutActivity::class.java)
             intent.putParcelableArrayListExtra("cart", ArrayList(listCart))
@@ -223,6 +283,9 @@ class DataTransaksiActivity : AppCompatActivity() {
             for (item in listCart) total += (item.produk?.hargaJual ?: 0) * item.jumlah
             intent.putExtra("total", total)
             intent.putExtra("cabangId", activeCabangId)
+            intent.putExtra("kasirName", selectedKasirName)
+            intent.putExtra("pelangganId", selectedPelangganId)
+            intent.putExtra("pelangganName", selectedPelangganName)
             startActivityForResult(intent, 100)
         }
 

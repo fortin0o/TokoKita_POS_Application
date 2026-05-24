@@ -40,12 +40,39 @@
                     android:src="@drawable/account"
                     app:tint="@color/white" />
 
-                <ImageView
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardCabangSelector"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:src="@android:drawable/ic_menu_sort_by_size"
-                    app:tint="@color/white" />
+                    app:cardBackgroundColor="#33FFFFFF"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="0dp"
+                    android:clickable="true"
+                    android:focusable="true">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="6dp"
+                        android:gravity="center_vertical">
+                        <ImageView
+                            android:layout_width="14dp"
+                            android:layout_height="14dp"
+                            android:src="@android:drawable/ic_dialog_map"
+                            app:tint="@color/white" />
+                        <TextView
+                            android:id="@+id/tvCurrentCabang"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:text="Semua Cabang"
+                            android:textColor="@color/white"
+                            android:textSize="11sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
             </RelativeLayout>
 
             <TextView
@@ -65,46 +92,6 @@
                 android:text="20 Mei 2026"
                 android:textColor="#B3FFFFFF"
                 android:textSize="14sp" />
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardCabangSelector"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                app:cardBackgroundColor="@color/brand_cream"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp"
-                android:clickable="true"
-                android:focusable="true">
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="16dp"
-                    android:paddingVertical="8dp"
-                    android:gravity="center_vertical">
-                    <ImageView
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:src="@android:drawable/ic_dialog_map"
-                        app:tint="@color/primary_brand" />
-                    <TextView
-                        android:id="@+id/tvCurrentCabang"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:text="Semua Cabang"
-                        android:textColor="@color/primary_brand"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
-                    <ImageView
-                        android:layout_width="14dp"
-                        android:layout_height="14dp"
-                        android:layout_marginStart="4dp"
-                        android:src="@android:drawable/arrow_down_float"
-                        app:tint="@color/primary_brand" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
 
         <!-- Summary Card -->

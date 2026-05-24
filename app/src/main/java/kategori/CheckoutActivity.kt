@@ -1,6 +1,9 @@
 package kategori
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.View
 import android.widget.*
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -19,8 +22,9 @@ import java.util.*
 
 class CheckoutActivity : AppCompatActivity() {
 
-    private lateinit var actKasir: AutoCompleteTextView
-    private lateinit var actPelanggan: AutoCompleteTextView
+    private lateinit var etBayar: EditText
+    private lateinit var tvKembalian: TextView
+    private lateinit var layoutKembalian: View
     private lateinit var cgMetode: ChipGroup
     private lateinit var tvTotal: TextView
     private lateinit var btnBayar: Button
@@ -28,16 +32,15 @@ class CheckoutActivity : AppCompatActivity() {
     private var listCart = mutableListOf<modelCartItem>()
     private var totalHarga = 0
     private var activeCabangId = ""
+    private var kasirName = ""
+    private var pelangganId = ""
+    private var pelangganName = ""
 
     private val db = FirebaseDatabase.getInstance()
-    private val listPegawai = mutableListOf<modelPegawai>()
-    private val listPelanggan = mutableListOf<modelPelanggan>()
     
     private var namaToko = "TokoKita"
     private var headerStruk = ""
     private var footerStruk = ""
-
-    private var selectedPelangganId: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,11 +56,13 @@ class CheckoutActivity : AppCompatActivity() {
         listCart = intent.getParcelableArrayListExtra<modelCartItem>("cart") ?: mutableListOf()
         totalHarga = intent.getIntExtra("total", 0)
         activeCabangId = intent.getStringExtra("cabangId") ?: ""
+        kasirName = intent.getStringExtra("kasirName") ?: "Kasir"
+        pelangganId = intent.getStringExtra("pelangganId") ?: ""
+        pelangganName = intent.getStringExtra("pelangganName") ?: "Umum"
 
         initView()
         loadSettings()
-        loadPegawai()
-        loadPelanggan()
+        setupBayar()
         
         tvTotal.text = "Rp %,d".format(totalHarga)
         
@@ -66,11 +71,40 @@ class CheckoutActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        actKasir = findViewById(R.id.actKasir)
-        actPelanggan = findViewById(R.id.actPelanggan)
+        etBayar = findViewById(R.id.etBayar)
+        tvKembalian = findViewById(R.id.tvKembalian)
+        layoutKembalian = findViewById(R.id.layoutKembalian)
         cgMetode = findViewById(R.id.cgMetode)
         tvTotal = findViewById(R.id.tvTotalCheckout)
         btnBayar = findViewById(R.id.btnBayarFinal)
+    }
+
+    private fun setupBayar() {
+        etBayar.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                val bayar = s.toString().toIntOrNull() ?: 0
+                if (bayar >= totalHarga && totalHarga > 0) {
+                    layoutKembalian.visibility = View.VISIBLE
+                    tvKembalian.text = "Rp %,d".format(bayar - totalHarga)
+                } else {
+                    layoutKembalian.visibility = View.GONE
+                }
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+
+        cgMetode.setOnCheckedChangeListener { _, checkedId ->
+            if (checkedId != R.id.chipTunai) {
+                etBayar.visibility = View.GONE
+                layoutKembalian.visibility = View.GONE
+            } else {
+                etBayar.visibility = View.VISIBLE
+                if ((etBayar.text.toString().toIntOrNull() ?: 0) >= totalHarga) {
+                    layoutKembalian.visibility = View.VISIBLE
+                }
+            }
+        }
     }
 
     private fun loadSettings() {
@@ -86,63 +120,22 @@ class CheckoutActivity : AppCompatActivity() {
         })
     }
 
-    private fun loadPegawai() {
-        db.getReference("Pegawai").addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                listPegawai.clear()
-                val names = mutableListOf<String>()
-                for (snap in snapshot.children) {
-                    val p = snap.getValue(modelPegawai::class.java)
-                    if (p != null && p.statusPegawai == "Aktif") {
-                        listPegawai.add(p)
-                        names.add(p.namaPegawai ?: "")
-                    }
-                }
-                val adapter = ArrayAdapter(this@CheckoutActivity, android.R.layout.simple_dropdown_item_1line, names)
-                actKasir.setAdapter(adapter)
-            }
-            override fun onCancelled(error: DatabaseError) {}
-        })
-    }
-
-    private fun loadPelanggan() {
-        db.getReference("Pelanggan").addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                listPelanggan.clear()
-                val names = mutableListOf<String>()
-                names.add("Umum / Walk-in")
-                for (snap in snapshot.children) {
-                    val p = snap.getValue(modelPelanggan::class.java)
-                    if (p != null && p.statusPelanggan == "Aktif") {
-                        listPelanggan.add(p)
-                        names.add(p.namaPelanggan ?: "")
-                    }
-                }
-                val adapter = ArrayAdapter(this@CheckoutActivity, android.R.layout.simple_dropdown_item_1line, names)
-                actPelanggan.setAdapter(adapter)
-            }
-            override fun onCancelled(error: DatabaseError) {}
-        })
-
-        actPelanggan.setOnItemClickListener { _, _, position, _ ->
-            if (position == 0) {
-                selectedPelangganId = ""
-            } else {
-                selectedPelangganId = listPelanggan[position - 1].idPelanggan ?: ""
-            }
-        }
-    }
-
     private fun saveTransaction() {
-        val kasirName = actKasir.text.toString()
-        if (kasirName == "Pilih Kasir" || kasirName.isEmpty()) {
-            Toast.makeText(this, "Pilih Kasir terlebih dahulu", Toast.LENGTH_SHORT).show()
+        val selectedMetodeId = cgMetode.checkedChipId
+        if (selectedMetodeId == -1) {
+            Toast.makeText(this, "Pilih metode pembayaran", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val selectedMetodeId = cgMetode.checkedChipId
         val metode = findViewById<Chip>(selectedMetodeId).text.toString()
-        val pelangganName = actPelanggan.text.toString()
+        
+        if (metode == "Tunai") {
+            val bayar = etBayar.text.toString().toIntOrNull() ?: 0
+            if (bayar < totalHarga) {
+                Toast.makeText(this, "Uang pembayaran kurang", Toast.LENGTH_SHORT).show()
+                return
+            }
+        }
 
         val ref = db.getReference("transaksi")
         val id = ref.push().key ?: return
@@ -157,7 +150,7 @@ class CheckoutActivity : AppCompatActivity() {
             tanggal = date,
             idCabang = activeCabangId,
             namaPegawai = kasirName,
-            idPelanggan = selectedPelangganId,
+            idPelanggan = pelangganId,
             namaPelanggan = pelangganName,
             metodePembayaran = metode
         )
@@ -203,6 +196,13 @@ class CheckoutActivity : AppCompatActivity() {
         }
         sb.append("----------------------------\n")
         sb.append("Total:           Rp %,d\n".format(transaksi.totalHarga))
+        
+        if (transaksi.metodePembayaran == "Tunai") {
+            val bayar = etBayar.text.toString().toIntOrNull() ?: 0
+            sb.append("Bayar:           Rp %,d\n".format(bayar))
+            sb.append("Kembalian:       Rp %,d\n".format(bayar - transaksi.totalHarga))
+        }
+
         sb.append("----------------------------\n")
         if (footerStruk.isNotEmpty()) sb.append("$footerStruk\n")
         else sb.append("Terima Kasih!\n")
