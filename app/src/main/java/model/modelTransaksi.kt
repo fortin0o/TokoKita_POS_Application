@@ -16,6 +16,7 @@ data class modelTransaksi(
     var idCabang: String? = null,
     var tanggal: String? = null,
     var metodePembayaran: String? = "Tunai",
+    var uangDiterima: Int = 0,
     var status: String? = "Selesai"
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
@@ -31,6 +32,7 @@ data class modelTransaksi(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
+        parcel.readInt(),
         parcel.readString()
     )
 
@@ -47,6 +49,7 @@ data class modelTransaksi(
         parcel.writeString(idCabang)
         parcel.writeString(tanggal)
         parcel.writeString(metodePembayaran)
+        parcel.writeInt(uangDiterima)
         parcel.writeString(status)
     }
 

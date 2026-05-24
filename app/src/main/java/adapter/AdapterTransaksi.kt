@@ -1,5 +1,6 @@
 package adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.donald.aplikasikedua.R
 import com.google.firebase.database.FirebaseDatabase
+import kategori.ReceiptActivity
 import model.modelTransaksi
 
 class AdapterTransaksi(private var list: List<modelTransaksi>) :
@@ -36,6 +38,12 @@ class AdapterTransaksi(private var list: List<modelTransaksi>) :
 
         val itemsText = item.listProduk?.joinToString(", ") { it.produk?.namaProduk ?: "" }
         holder.tvItems.text = "${item.listProduk?.sumOf { it.jumlah }} Items ($itemsText)"
+
+        holder.itemView.setOnClickListener {
+            val intent = Intent(holder.itemView.context, ReceiptActivity::class.java)
+            intent.putExtra("transaksi", item)
+            holder.itemView.context.startActivity(intent)
+        }
 
         holder.btnDelete.setOnClickListener {
             val db = FirebaseDatabase.getInstance().getReference("transaksi")

@@ -1,5 +1,6 @@
 package kategori
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -140,6 +141,7 @@ class CheckoutActivity : AppCompatActivity() {
         val ref = db.getReference("transaksi")
         val id = ref.push().key ?: return
         val date = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+        val bayar = if (metode == "Tunai") etBayar.text.toString().toIntOrNull() ?: 0 else totalHarga
         
         val transaksi = modelTransaksi(
             idTransaksi = id,
@@ -152,12 +154,15 @@ class CheckoutActivity : AppCompatActivity() {
             namaPegawai = kasirName,
             idPelanggan = pelangganId,
             namaPelanggan = pelangganName,
-            metodePembayaran = metode
+            metodePembayaran = metode,
+            uangDiterima = bayar
         )
 
         ref.child(id).setValue(transaksi).addOnSuccessListener {
             updateStock()
-            showReceipt(transaksi)
+            val intent = Intent(this, ReceiptActivity::class.java)
+            intent.putExtra("transaksi", transaksi)
+            startActivityForResult(intent, 200)
         }.addOnFailureListener {
             Toast.makeText(this, "Transaksi Gagal", Toast.LENGTH_SHORT).show()
         }
@@ -172,59 +177,11 @@ class CheckoutActivity : AppCompatActivity() {
         }
     }
 
-    private fun showReceipt(transaksi: modelTransaksi) {
-        val dialog = android.app.Dialog(this)
-        dialog.setContentView(R.layout.dialog_receipt)
-        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-        
-        val tvContent = dialog.findViewById<TextView>(R.id.tvReceiptContent)
-        val btnCetak = dialog.findViewById<Button>(R.id.btnCetak)
-        val btnTutup = dialog.findViewById<Button>(R.id.btnTutup)
-        
-        val sb = StringBuilder()
-        sb.append("$namaToko\n")
-        if (headerStruk.isNotEmpty()) sb.append("$headerStruk\n")
-        sb.append("Tanggal: ${transaksi.tanggal}\n")
-        sb.append("Kasir: ${transaksi.namaPegawai}\n")
-        if (transaksi.namaPelanggan != "Umum / Walk-in") {
-            sb.append("Pelanggan: ${transaksi.namaPelanggan}\n")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 200 && resultCode == RESULT_OK) {
+            setResult(RESULT_OK)
+            finish()
         }
-        sb.append("Metode: ${transaksi.metodePembayaran}\n")
-        sb.append("----------------------------\n")
-        transaksi.listProduk?.forEach {
-            sb.append("${it.produk?.namaProduk?.padEnd(15)} x${it.jumlah}  Rp %,d\n".format((it.produk?.hargaJual ?: 0) * it.jumlah))
-        }
-        sb.append("----------------------------\n")
-        sb.append("Total:           Rp %,d\n".format(transaksi.totalHarga))
-        
-        if (transaksi.metodePembayaran == "Tunai") {
-            val bayar = etBayar.text.toString().toIntOrNull() ?: 0
-            sb.append("Bayar:           Rp %,d\n".format(bayar))
-            sb.append("Kembalian:       Rp %,d\n".format(bayar - transaksi.totalHarga))
-        }
-
-        sb.append("----------------------------\n")
-        if (footerStruk.isNotEmpty()) sb.append("$footerStruk\n")
-        else sb.append("Terima Kasih!\n")
-        
-        tvContent.text = sb.toString()
-        
-        btnCetak.setOnClickListener {
-            Toast.makeText(this, "Mencetak struk...", Toast.LENGTH_SHORT).show()
-            dialog.dismiss()
-            finishWithResult()
-        }
-        
-        btnTutup.setOnClickListener { 
-            dialog.dismiss()
-            finishWithResult()
-        }
-        dialog.setCancelable(false)
-        dialog.show()
-    }
-
-    private fun finishWithResult() {
-        setResult(RESULT_OK)
-        finish()
     }
 }

@@ -55,6 +55,10 @@
             android:exported="false" />
 
         <activity
+            android:name="kategori.ReceiptActivity"
+            android:exported="false" />
+
+        <activity
             android:name="kategori.PrinterActivity"
             android:exported="false" />
 
