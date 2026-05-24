@@ -136,6 +136,11 @@ class MainActivity : AppCompatActivity() {
         val dialog = BottomSheetDialog(this)
         val view = layoutInflater.inflate(R.layout.layout_profile_bottom_sheet, null)
         
+        view.findViewById<View>(R.id.menuSettings).setOnClickListener {
+            dialog.dismiss()
+            startActivity(Intent(this, SettingsActivity::class.java))
+        }
+
         view.findViewById<View>(R.id.menuLogout).setOnClickListener {
             dialog.dismiss()
             // Logout logic

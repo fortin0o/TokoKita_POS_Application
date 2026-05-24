@@ -20,18 +20,6 @@
             android:background="@color/primary_brand"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Logo Overlay (Subtle Brand Shape) -->
-        <ImageView
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_marginTop="-20dp"
-            android:layout_marginEnd="-20dp"
-            android:alpha="0.15"
-            android:src="@drawable/ic_launcher_foreground"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/brand_cream" />
-
         <!-- Greeting Section -->
         <LinearLayout
             android:id="@+id/greetingLayout"

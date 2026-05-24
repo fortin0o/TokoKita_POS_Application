@@ -23,10 +23,14 @@ class TambahCabangActivity : AppCompatActivity() {
     private lateinit var btnSimpan: Button
     private lateinit var ivBack: ImageView
 
+    private var cabangExisting: modelCabang? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_tambah_cabang)
+
+        cabangExisting = intent.getParcelableExtra("cabang")
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -39,6 +43,25 @@ class TambahCabangActivity : AppCompatActivity() {
         actStatus = findViewById(R.id.actStatus)
         btnSimpan = findViewById(R.id.btnSimpan)
         ivBack = findViewById(R.id.ivBack)
+
+        if (cabangExisting != null) {
+            findViewById<android.widget.TextView>(R.id.headerLayout).parent.let { it as android.view.ViewGroup }.let { group ->
+                 for (i in 0 until group.childCount) {
+                     if (group.getChildAt(i) is android.view.ViewGroup) {
+                         val inner = group.getChildAt(i) as android.view.ViewGroup
+                         for (j in 0 until inner.childCount) {
+                             if (inner.getChildAt(j) is android.widget.LinearLayout) {
+                                 val texts = inner.getChildAt(j) as android.widget.LinearLayout
+                                 (texts.getChildAt(0) as android.widget.TextView).text = "Ubah Cabang"
+                             }
+                         }
+                     }
+                 }
+            }
+            etNamaCabang.setText(cabangExisting?.namaCabang)
+            etAlamatCabang.setText(cabangExisting?.alamatCabang)
+            actStatus.setText(cabangExisting?.statusCabang, false)
+        }
 
         // Set up status dropdown
         val statusList = arrayOf("Pusat", "Cabang")
@@ -64,7 +87,7 @@ class TambahCabangActivity : AppCompatActivity() {
 
         val database = FirebaseDatabase.getInstance()
         val myRef = database.getReference("Cabang")
-        val id = myRef.push().key
+        val id = cabangExisting?.idCabang ?: myRef.push().key
 
         val cabang = modelCabang(id, nama, alamat, status)
 

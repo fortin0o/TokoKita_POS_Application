@@ -48,7 +48,8 @@ class DataProdukActivity : AppCompatActivity() {
         listProduk = ArrayList()
         adapter = ProdukAdapter(listProduk)
 
-        rvProduk.layoutManager = LinearLayoutManager(this)
+        val spanCount = if (resources.configuration.orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE) 3 else 1
+        rvProduk.layoutManager = androidx.recyclerview.widget.GridLayoutManager(this, spanCount)
         rvProduk.adapter = adapter
     }
 

@@ -32,9 +32,10 @@
             android:textStyle="bold"
             android:textSize="16sp"
             android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
             app:layout_constraintStart_toEndOf="@id/img_produk"
             app:layout_constraintTop_toTopOf="@id/img_produk"
-            app:layout_constraintEnd_toStartOf="@+id/chip_status"/>
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <TextView
             android:id="@+id/tv_harga_produk"
@@ -51,11 +52,12 @@
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_status"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="32dp"
             android:text="Aktif"
-            app:chipStrokeWidth="1dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/img_produk"/>
+            android:textSize="10sp"
+            app:chipStrokeWidth="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

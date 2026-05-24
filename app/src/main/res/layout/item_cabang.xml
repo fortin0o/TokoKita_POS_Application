@@ -60,22 +60,24 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tvAlamat"
+                android:id="@+id/tvAlamatCabang"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Jl. Merdeka No. 123"
                 android:textColor="@color/text_gray"
                 android:textSize="12sp" />
 
-            <TextView
-                android:id="@+id/tvStatus"
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipStatus"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="32dp"
                 android:layout_marginTop="4dp"
                 android:text="Pusat"
-                android:textColor="@color/green"
                 android:textSize="10sp"
-                android:textStyle="bold" />
+                app:chipStrokeWidth="0dp"
+                android:clickable="false"
+                android:focusable="false" />
         </LinearLayout>
 
         <!-- Action Buttons -->

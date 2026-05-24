@@ -36,7 +36,8 @@ class DataPegawaiActivity : AppCompatActivity() {
         }
 
         rvPegawai = findViewById(R.id.rvPegawai)
-        rvPegawai.layoutManager = LinearLayoutManager(this)
+        val spanCount = if (resources.configuration.orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE) 2 else 1
+        rvPegawai.layoutManager = androidx.recyclerview.widget.GridLayoutManager(this, spanCount)
         
         adapter = AdapterPegawai(listPegawai, 
             onEdit = { pegawai ->
