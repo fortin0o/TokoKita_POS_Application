@@ -152,7 +152,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_marginStart="8dp"
-                    android:src="@drawable/transaction"
+                    android:src="@android:drawable/ic_input_add"
                     app:tint="@color/white" />
             </LinearLayout>
         </RelativeLayout>
