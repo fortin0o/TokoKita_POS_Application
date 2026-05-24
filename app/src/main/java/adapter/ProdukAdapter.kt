@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.donald.aplikasikedua.R
 import com.google.android.material.chip.Chip
+import com.google.firebase.database.FirebaseDatabase
 import kategori.TambahProdukActivity
 import model.modelProduk
 
@@ -20,6 +22,7 @@ class ProdukAdapter(private val list: ArrayList<modelProduk>) :
         val nama: TextView = itemView.findViewById(R.id.tv_nama_produk)
         val harga: TextView = itemView.findViewById(R.id.tv_harga_produk)
         val status: Chip = itemView.findViewById(R.id.chip_status)
+        val btnDelete: View? = itemView.findViewById(R.id.ivDelete) // Not currently in layout, let's check
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -63,6 +66,15 @@ class ProdukAdapter(private val list: ArrayList<modelProduk>) :
             val intent = Intent(holder.itemView.context, TambahProdukActivity::class.java)
             intent.putExtra("produk", data)
             holder.itemView.context.startActivity(intent)
+        }
+
+        holder.itemView.findViewById<View>(R.id.ivDelete).setOnClickListener {
+            val db = FirebaseDatabase.getInstance().getReference("produk")
+            data.idProduk?.let { id ->
+                db.child(id).removeValue().addOnSuccessListener {
+                    Toast.makeText(holder.itemView.context, "Produk dihapus", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 

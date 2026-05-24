@@ -147,6 +147,11 @@ class TambahProdukActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 listCabang.clear()
                 val names = mutableListOf<String>()
+                
+                // Add "Semua Cabang" option
+                names.add("Semua Cabang")
+                listCabang.add(modelCabang("", "Semua Cabang", "", ""))
+
                 for (item in snapshot.children) {
                     val cabang = item.getValue(modelCabang::class.java)
                     if (cabang != null) {
@@ -164,6 +169,11 @@ class TambahProdukActivity : AppCompatActivity() {
                     } else {
                         val current = listCabang.find { it.idCabang == idCabang }
                         current?.let { actCabang.setText(it.namaCabang, false) }
+                        // If not found (e.g. was "Semua Cabang" but model stored empty string), default to first
+                        if (current == null) {
+                             actCabang.setText(listCabang[0].namaCabang, false)
+                             idCabang = listCabang[0].idCabang ?: ""
+                        }
                     }
                 }
             }

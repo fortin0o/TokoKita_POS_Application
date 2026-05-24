@@ -4,8 +4,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.donald.aplikasikedua.R
+import com.google.firebase.database.FirebaseDatabase
 import model.modelTransaksi
 
 class AdapterTransaksi(private var list: List<modelTransaksi>) :
@@ -17,6 +19,7 @@ class AdapterTransaksi(private var list: List<modelTransaksi>) :
         val tvTotal: TextView = view.findViewById(R.id.tvTotal)
         val tvItems: TextView = view.findViewById(R.id.tvItems)
         val tvKasir: TextView = view.findViewById(R.id.tvKasir)
+        val btnDelete: View = view.findViewById(R.id.btnDelete)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -33,6 +36,15 @@ class AdapterTransaksi(private var list: List<modelTransaksi>) :
 
         val itemsText = item.listProduk?.joinToString(", ") { it.produk?.namaProduk ?: "" }
         holder.tvItems.text = "${item.listProduk?.sumOf { it.jumlah }} Items ($itemsText)"
+
+        holder.btnDelete.setOnClickListener {
+            val db = FirebaseDatabase.getInstance().getReference("transaksi")
+            item.idTransaksi?.let { id ->
+                db.child(id).removeValue().addOnSuccessListener {
+                    Toast.makeText(holder.itemView.context, "Transaksi dihapus", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     override fun getItemCount(): Int = list.size

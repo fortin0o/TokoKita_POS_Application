@@ -71,5 +71,17 @@
             android:textSize="11sp"
             android:textStyle="bold" />
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnDelete"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="Hapus Transaksi"
+            android:textColor="@color/red"
+            android:textSize="10sp"
+            app:icon="@android:drawable/ic_menu_delete"
+            app:iconTint="@color/red" />
+
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>
