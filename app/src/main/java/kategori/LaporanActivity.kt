@@ -1,10 +1,13 @@
 package kategori
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +17,9 @@ import com.donald.aplikasikedua.R
 import com.google.firebase.database.*
 import model.modelCabang
 import model.modelTransaksi
+import java.io.File
+import java.io.FileOutputStream
+import java.util.*
 
 class LaporanActivity : AppCompatActivity() {
 
@@ -53,6 +59,45 @@ class LaporanActivity : AppCompatActivity() {
         rvTransaksi.adapter = adapter
 
         loadData()
+
+        if (intent.getStringExtra("action") == "export") {
+            exportToCsv()
+        }
+    }
+
+    private fun exportToCsv() {
+        val ref = FirebaseDatabase.getInstance().getReference("transaksi")
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val csvContent = StringBuilder()
+                csvContent.append("ID Transaksi;Tanggal;Total;Kasir;Pelanggan;Metode\n")
+                
+                for (snap in snapshot.children) {
+                    val trx = snap.getValue(modelTransaksi::class.java)
+                    if (trx != null) {
+                        csvContent.append("${trx.idTransaksi};${trx.tanggal};${trx.totalHarga};${trx.namaPegawai};${trx.namaPelanggan ?: "Umum"};${trx.metodePembayaran}\n")
+                    }
+                }
+
+                try {
+                    val file = File(getExternalFilesDir(null), "Laporan_TokoKita.csv")
+                    val out = FileOutputStream(file)
+                    out.write(csvContent.toString().toByteArray())
+                    out.close()
+
+                    val uri = FileProvider.getUriForFile(this@LaporanActivity, "${packageName}.provider", file)
+                    val intent = Intent(Intent.ACTION_SEND)
+                    intent.type = "text/csv"
+                    intent.putExtra(Intent.EXTRA_STREAM, uri)
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    startActivity(Intent.createChooser(intent, "Ekspor Laporan"))
+                    
+                } catch (e: Exception) {
+                    Toast.makeText(this@LaporanActivity, "Gagal ekspor: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {}
+        })
     }
 
     private fun showCabangSelector() {

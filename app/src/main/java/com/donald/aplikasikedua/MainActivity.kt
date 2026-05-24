@@ -163,13 +163,34 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
 
+        view.findViewById<View>(R.id.menuExport).setOnClickListener {
+            dialog.dismiss()
+            startActivity(Intent(this, LaporanActivity::class.java).apply {
+                putExtra("action", "export")
+            })
+        }
+
+        view.findViewById<View>(R.id.menuAbout).setOnClickListener {
+            dialog.dismiss()
+            startActivity(Intent(this, TentangAplikasiActivity::class.java))
+        }
+
         view.findViewById<View>(R.id.menuLogout).setOnClickListener {
             dialog.dismiss()
-            // Logout logic
+            showLogoutConfirmation()
         }
         
         dialog.setContentView(view)
         dialog.show()
+    }
+
+    private fun showLogoutConfirmation() {
+        android.app.AlertDialog.Builder(this)
+            .setTitle("Keluar Aplikasi")
+            .setMessage("Apakah Anda yakin ingin keluar dari aplikasi?")
+            .setPositiveButton("Ya") { _, _ -> finishAffinity() }
+            .setNegativeButton("Tidak", null)
+            .show()
     }
 
     private fun showCabangSelector() {
