@@ -62,6 +62,7 @@
                     android:textColor="@color/text_gray"
                     android:textSize="12sp" />
                 <TextView
+                    android:id="@+id/tvPrinterStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Printer Tidak Terhubung"
@@ -70,6 +71,7 @@
                     android:textStyle="bold" />
 
                 <Button
+                    android:id="@+id/btnSearchPrinter"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
                     android:layout_marginTop="24dp"
@@ -89,6 +91,7 @@
             android:textStyle="bold" />
 
         <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/swAutoPrint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -96,6 +99,7 @@
             android:textColor="@color/text_dark" />
 
         <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/swShowLogo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
