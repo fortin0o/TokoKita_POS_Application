@@ -33,6 +33,10 @@ class ReceiptActivity : AppCompatActivity() {
     private lateinit var btnBagikan: Button
     private lateinit var btnCetak: Button
 
+    private var autoPrint = false
+    private var printerAddress: String? = null
+    private var showLogoInPrint = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -48,9 +52,13 @@ class ReceiptActivity : AppCompatActivity() {
 
         initView()
         loadSettings()
+        loadPrinterSettings()
 
         if (transaksi != null) {
             populateData(transaksi)
+            if (autoPrint) {
+                printReceipt(transaksi)
+            }
         }
 
         btnSelesai.setOnClickListener {
@@ -63,8 +71,64 @@ class ReceiptActivity : AppCompatActivity() {
         }
 
         btnCetak.setOnClickListener {
-            Toast.makeText(this, "Mencetak struk...", Toast.LENGTH_SHORT).show()
+            if (transaksi != null) {
+                printReceipt(transaksi)
+            }
         }
+    }
+
+    private fun loadPrinterSettings() {
+        val prefs = getSharedPreferences("PrinterSettings", android.content.Context.MODE_PRIVATE)
+        autoPrint = prefs.getBoolean("autoPrint", false)
+        printerAddress = prefs.getString("printerAddress", null)
+        showLogoInPrint = prefs.getBoolean("showLogo", true)
+    }
+
+    private fun printReceipt(trx: modelTransaksi) {
+        if (printerAddress == null) {
+            Toast.makeText(this, "Printer belum diatur. Silakan atur di Pengaturan Printer.", Toast.LENGTH_LONG).show()
+            return
+        }
+
+        // Prepare thermal print data (Standard 32-char width)
+        val sb = StringBuilder()
+        if (showLogoInPrint) sb.append("[LOGO]\n")
+        sb.append("${tvStoreName.text}\n")
+        sb.append("${tvStoreHeader.text}\n")
+        sb.append("--------------------------------\n")
+        sb.append("ID: ${trx.idTransaksi}\n")
+        sb.append("Tgl: ${trx.tanggal}\n")
+        sb.append("Kasir: ${trx.namaPegawai}\n")
+        sb.append("Plg: ${trx.namaPelanggan ?: "Umum"}\n")
+        sb.append("--------------------------------\n")
+        
+        trx.listProduk?.forEach { item ->
+            sb.append("${item.produk?.namaProduk}\n")
+            val qtyPrice = "${item.jumlah} x ${item.produk?.hargaJual}"
+            val total = "Rp %,d".format((item.produk?.hargaJual ?: 0) * item.jumlah)
+            sb.append(qtyPrice.padEnd(32 - total.length) + total + "\n")
+        }
+        
+        sb.append("--------------------------------\n")
+        val totalLabel = "TOTAL"
+        val totalValue = "Rp %,d".format(trx.totalHarga)
+        sb.append(totalLabel.padEnd(32 - totalValue.length) + totalValue + "\n")
+        
+        if (trx.metodePembayaran == "Tunai") {
+            val bayarLabel = "Bayar"
+            val bayarValue = "Rp %,d".format(trx.uangDiterima)
+            sb.append(bayarLabel.padEnd(32 - bayarValue.length) + bayarValue + "\n")
+            
+            val kembaliLabel = "Kembali"
+            val kembaliValue = "Rp %,d".format(trx.uangDiterima - trx.totalHarga)
+            sb.append(kembaliLabel.padEnd(32 - kembaliValue.length) + kembaliValue + "\n")
+        }
+        
+        sb.append("--------------------------------\n")
+        sb.append("${tvFooter.text}\n\n\n")
+
+        // Logic for actual hardware printing would go here using the printerAddress
+        Toast.makeText(this, "Mengirim data ke printer: ${getSharedPreferences("PrinterSettings", android.content.Context.MODE_PRIVATE).getString("printerName", "Printer")}", Toast.LENGTH_SHORT).show()
     }
 
     private fun initView() {
