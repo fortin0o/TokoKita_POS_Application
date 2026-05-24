@@ -36,7 +36,7 @@ class KategoriAdapter(private val list: ArrayList<modelKategori>) :
 
         holder.tvNama.text = data.namaKategori
 
-        // 🔥 LOGIC ICON + TEXT
+        // Status indicator
         val statusText = data.statusKategori ?: "Tidak Aktif"
         holder.chipStatus.text = statusText
         

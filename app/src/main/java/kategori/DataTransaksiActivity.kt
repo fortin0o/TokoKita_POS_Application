@@ -129,6 +129,7 @@ class DataTransaksiActivity : AppCompatActivity() {
     }
 
     private fun loadProduk() {
+        // Load products from Firebase
         db.getReference("produk").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 listProduk.clear()

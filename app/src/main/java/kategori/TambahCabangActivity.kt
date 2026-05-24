@@ -51,7 +51,7 @@ class TambahCabangActivity : AppCompatActivity() {
             actStatus.setText(cabangExisting?.statusCabang, false)
         }
 
-        // Set up status dropdown
+        // Status dropdown setup
         val statusList = arrayOf("Pusat", "Cabang")
         val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, statusList)
         actStatus.setAdapter(adapter)

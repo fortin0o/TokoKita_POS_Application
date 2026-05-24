@@ -61,7 +61,7 @@ class TambahPegawaiActivity : AppCompatActivity() {
             }
         }
 
-        // Set up role dropdown
+        // Role selection setup
         val roles = arrayOf("Staff", "Manager", "Admin", "Kasir")
         val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, roles)
         actRole.setAdapter(adapter)

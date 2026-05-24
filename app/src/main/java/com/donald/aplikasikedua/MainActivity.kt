@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        // --- Navigation Links ---
+        // Navigation Links
 
         // 1. Menu (Daftar Produk)
         findViewById<View>(R.id.cardMenu).setOnClickListener {
@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, PrinterActivity::class.java))
         }
 
-        // --- Quick Actions ---
+        // Quick Actions
         
         // 1. Transaksi
         findViewById<View>(R.id.actionTransaksi).setOnClickListener {
@@ -100,7 +100,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, LaporanActivity::class.java))
         }
 
-        // --- Profile Bottom Sheet ---
+        // Profile Bottom Sheet
         findViewById<View>(R.id.ivProfile).setOnClickListener {
             showProfileBottomSheet()
         }

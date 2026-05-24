@@ -44,14 +44,14 @@ class ProdukAdapter(private val list: ArrayList<modelProduk>) :
             tvCabang?.visibility = View.GONE
         }
 
-        // ✅ Nama Produk
+        // Nama Produk
         holder.nama.text = data.namaProduk ?: "-"
 
-        // ✅ Harga Produk (fix dari hargaJual → hargaProduk)
+        // Harga Produk (fix dari hargaJual -> hargaProduk)
         val harga = data.hargaJual ?: 0
         holder.harga.text = "Rp %,d".format(harga)
 
-        // ✅ Status Produk
+        // Status Produk
         val statusText = data.statusProduk ?: "Habis / Nonaktif"
         holder.status.text = statusText
 
@@ -65,11 +65,9 @@ class ProdukAdapter(private val list: ArrayList<modelProduk>) :
             holder.status.chipStrokeWidth = 0f
         }
 
-
         holder.img.setImageResource(android.R.drawable.ic_menu_gallery)
 
-
-
+        // Klik item
         holder.itemView.setOnClickListener {
             val intent = Intent(holder.itemView.context, TambahProdukActivity::class.java)
             intent.putExtra("produk", data)

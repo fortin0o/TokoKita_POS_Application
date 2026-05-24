@@ -164,6 +164,8 @@ class ReceiptActivity : AppCompatActivity() {
     }
 
     private fun shareReceipt(trx: modelTransaksi) {
+        // Prepare thermal print data (Standard 32-char width)
+        // Generate formatted text for sharing
         val sb = StringBuilder()
         sb.append("===== $namaToko =====\n")
         if (headerStruk.isNotEmpty()) sb.append("$headerStruk\n")
@@ -216,6 +218,8 @@ class ReceiptActivity : AppCompatActivity() {
             return
         }
 
+        // Prepare thermal print data (Standard 32-char width)
+        // Generate formatted text for sharing
         val sb = StringBuilder()
         if (showLogoInPrint) sb.append("[LOGO]\n")
         sb.append("$namaToko\n")

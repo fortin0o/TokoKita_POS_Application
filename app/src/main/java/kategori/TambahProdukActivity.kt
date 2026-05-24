@@ -107,7 +107,7 @@ class TambahProdukActivity : AppCompatActivity() {
         findViewById<ImageView>(R.id.ivBack).setOnClickListener { finish() }
     }
 
-    // 🔽 Dropdown kategori
+    // Load categories
     private fun loadKategori() {
         db.getReference("kategori").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -221,7 +221,7 @@ class TambahProdukActivity : AppCompatActivity() {
         etHargaJual.setText(hasil.toInt().toString())
     }
 
-    // 💾 Simpan ke Firebase
+    // Save to Firebase
     private fun setupAction() {
         btnSimpan.setOnClickListener {
 

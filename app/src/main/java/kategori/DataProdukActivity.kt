@@ -53,7 +53,7 @@ class DataProdukActivity : AppCompatActivity() {
         rvProduk.adapter = adapter
     }
 
-    // 🔥 LOAD DATA FIREBASE
+    // Load data from Firebase
     private fun loadData() {
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -73,7 +73,7 @@ class DataProdukActivity : AppCompatActivity() {
         })
     }
 
-    // 🔍 SEARCH
+    // Search functionality
     private fun setupSearch() {
         svProduk.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean = false
@@ -102,7 +102,7 @@ class DataProdukActivity : AppCompatActivity() {
         adapter.updateData(filtered)
     }
 
-    // ➕ ACTION FAB
+    // Add action button
     private fun setupAction() {
         fabTambah.setOnClickListener {
             startActivity(Intent(this, TambahProdukActivity::class.java))
