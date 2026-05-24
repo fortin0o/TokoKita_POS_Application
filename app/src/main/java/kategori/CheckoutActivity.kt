@@ -26,9 +26,14 @@ class CheckoutActivity : AppCompatActivity() {
     private lateinit var etBayar: EditText
     private lateinit var tvKembalian: TextView
     private lateinit var layoutKembalian: View
+    private lateinit var scrollQuickPay: View
     private lateinit var cgMetode: ChipGroup
     private lateinit var tvTotal: TextView
     private lateinit var btnBayar: Button
+
+    private lateinit var btnUangPas: Button
+    private lateinit var btnQuick50: Button
+    private lateinit var btnQuick100: Button
 
     private var listCart = mutableListOf<modelCartItem>()
     private var totalHarga = 0
@@ -75,9 +80,14 @@ class CheckoutActivity : AppCompatActivity() {
         etBayar = findViewById(R.id.etBayar)
         tvKembalian = findViewById(R.id.tvKembalian)
         layoutKembalian = findViewById(R.id.layoutKembalian)
+        scrollQuickPay = findViewById(R.id.scrollQuickPay)
         cgMetode = findViewById(R.id.cgMetode)
         tvTotal = findViewById(R.id.tvTotalCheckout)
         btnBayar = findViewById(R.id.btnBayarFinal)
+
+        btnUangPas = findViewById(R.id.btnUangPas)
+        btnQuick50 = findViewById(R.id.btnQuick50)
+        btnQuick100 = findViewById(R.id.btnQuick100)
     }
 
     private fun setupBayar() {
@@ -99,12 +109,26 @@ class CheckoutActivity : AppCompatActivity() {
             if (checkedId != R.id.chipTunai) {
                 etBayar.visibility = View.GONE
                 layoutKembalian.visibility = View.GONE
+                scrollQuickPay.visibility = View.GONE
             } else {
                 etBayar.visibility = View.VISIBLE
+                scrollQuickPay.visibility = View.VISIBLE
                 if ((etBayar.text.toString().toIntOrNull() ?: 0) >= totalHarga) {
                     layoutKembalian.visibility = View.VISIBLE
                 }
             }
+        }
+
+        btnUangPas.setOnClickListener {
+            etBayar.setText(totalHarga.toString())
+        }
+
+        btnQuick50.setOnClickListener {
+            etBayar.setText("50000")
+        }
+
+        btnQuick100.setOnClickListener {
+            etBayar.setText("100000")
         }
     }
 

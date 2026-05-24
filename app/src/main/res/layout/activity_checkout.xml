@@ -106,6 +106,45 @@
                             android:textColor="@color/chip_text_status" />
                     </com.google.android.material.chip.ChipGroup>
 
+                    <HorizontalScrollView
+                        android:id="@+id/scrollQuickPay"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:scrollbars="none">
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnUangPas"
+                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Uang Pas"
+                                android:textSize="11sp"
+                                app:cornerRadius="20dp" />
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnQuick50"
+                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text="50.000"
+                                android:textSize="11sp"
+                                app:cornerRadius="20dp" />
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnQuick100"
+                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text="100.000"
+                                android:textSize="11sp"
+                                app:cornerRadius="20dp" />
+                        </LinearLayout>
+                    </HorizontalScrollView>
+
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
