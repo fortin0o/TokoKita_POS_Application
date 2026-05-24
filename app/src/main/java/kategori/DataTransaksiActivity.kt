@@ -31,7 +31,6 @@ class DataTransaksiActivity : AppCompatActivity() {
     private lateinit var cgKategori: ChipGroup
     private lateinit var rvProdukSelection: RecyclerView
     private lateinit var rvCart: RecyclerView
-    private lateinit var tvSubtotal: TextView
     private lateinit var tvTotal: TextView
     private lateinit var tvCountItem: TextView
     private lateinit var btnBayar: Button
@@ -41,11 +40,15 @@ class DataTransaksiActivity : AppCompatActivity() {
     private lateinit var adapterCart: CartAdapter
 
     private val listProduk = mutableListOf<modelProduk>()
-    private val listKategori = mutableListOf<modelKategori>()
     private val listCart = mutableListOf<modelCartItem>()
 
     private val db = FirebaseDatabase.getInstance()
     private var selectedKategoriId: String = "Semua"
+    private var activeCabangId: String = ""
+
+    private var namaToko: String = "TokoKita"
+    private var headerStruk: String = ""
+    private var footerStruk: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +61,10 @@ class DataTransaksiActivity : AppCompatActivity() {
             insets
         }
 
+        activeCabangId = getSharedPreferences("TokoKita", MODE_PRIVATE).getString("cabangId", "") ?: ""
+
         initView()
+        loadSettings()
         setupRecyclerViews()
         loadKategori()
         loadProduk()
@@ -71,7 +77,6 @@ class DataTransaksiActivity : AppCompatActivity() {
         cgKategori = findViewById(R.id.cgKategori)
         rvProdukSelection = findViewById(R.id.rvProdukSelection)
         rvCart = findViewById(R.id.rvCart)
-        tvSubtotal = findViewById(R.id.tvSubtotal)
         tvTotal = findViewById(R.id.tvTotal)
         tvCountItem = findViewById(R.id.tvCountItem)
         
@@ -81,6 +86,19 @@ class DataTransaksiActivity : AppCompatActivity() {
         findViewById<ImageView>(R.id.ivHistory).setOnClickListener {
             startActivity(Intent(this, LaporanActivity::class.java))
         }
+    }
+
+    private fun loadSettings() {
+        db.getReference("Settings").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    namaToko = snapshot.child("namaToko").value?.toString() ?: "TokoKita"
+                    headerStruk = snapshot.child("headerStruk").value?.toString() ?: ""
+                    footerStruk = snapshot.child("footerStruk").value?.toString() ?: ""
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {}
+        })
     }
 
     private fun setupRecyclerViews() {
@@ -161,8 +179,9 @@ class DataTransaksiActivity : AppCompatActivity() {
         val query = svProduk.query.toString().lowercase()
         val filtered = listProduk.filter { produk ->
             val matchKategori = selectedKategoriId == "Semua" || produk.idKategori == selectedKategoriId
+            val matchCabang = activeCabangId.isEmpty() || produk.idCabang == activeCabangId
             val matchSearch = produk.namaProduk?.lowercase()?.contains(query) == true || produk.barcode?.lowercase()?.contains(query) == true
-            matchKategori && matchSearch
+            matchKategori && matchCabang && matchSearch
         }
         adapterProduk.updateData(filtered)
     }
@@ -179,15 +198,14 @@ class DataTransaksiActivity : AppCompatActivity() {
     }
 
     private fun updateSummary() {
-        var subtotal = 0
+        var subtotalVal = 0
         var count = 0
         for (item in listCart) {
-            subtotal += (item.produk?.hargaJual ?: 0) * item.jumlah
+            subtotalVal += (item.produk?.hargaJual ?: 0) * item.jumlah
             count += item.jumlah
         }
 
-        tvSubtotal.text = "Rp %,d".format(subtotal)
-        tvTotal.text = "Rp %,d".format(subtotal)
+        tvTotal.text = "Rp %,d".format(subtotalVal)
         tvCountItem.text = "$count item"
     }
 
@@ -225,6 +243,7 @@ class DataTransaksiActivity : AppCompatActivity() {
             totalHarga = subtotal,
             diskon = 0,
             tanggal = date,
+            idCabang = activeCabangId,
             namaPegawai = "Kasir"
         )
 
@@ -250,7 +269,8 @@ class DataTransaksiActivity : AppCompatActivity() {
         val btnTutup = dialog.findViewById<Button>(R.id.btnTutup)
         
         val sb = StringBuilder()
-        sb.append("TokoKita POS\n")
+        sb.append("$namaToko\n")
+        if (headerStruk.isNotEmpty()) sb.append("$headerStruk\n")
         sb.append("Tanggal: ${transaksi.tanggal}\n")
         sb.append("----------------------------\n")
         transaksi.listProduk?.forEach {
@@ -259,7 +279,8 @@ class DataTransaksiActivity : AppCompatActivity() {
         sb.append("----------------------------\n")
         sb.append("Total:           Rp %,d\n".format(transaksi.totalHarga))
         sb.append("----------------------------\n")
-        sb.append("Terima Kasih!")
+        if (footerStruk.isNotEmpty()) sb.append("$footerStruk\n")
+        else sb.append("Terima Kasih!\n")
         
         tvContent.text = sb.toString()
         

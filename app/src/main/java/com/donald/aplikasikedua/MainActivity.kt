@@ -11,6 +11,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.database.*
 import kategori.*
+import model.modelCabang
 import model.modelTransaksi
 import java.text.SimpleDateFormat
 import java.util.*
@@ -18,6 +19,10 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
 
     private lateinit var tvRevenue: TextView
+    private lateinit var tvCurrentCabang: TextView
+    
+    private var selectedCabangId: String = ""
+    private var selectedCabangNama: String = "Semua Cabang"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,10 +30,18 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         tvRevenue = findViewById(R.id.tvRevenue)
+        tvCurrentCabang = findViewById(R.id.tvCurrentCabang)
+
+        val prefs = getSharedPreferences("TokoKita", MODE_PRIVATE)
+        selectedCabangId = prefs.getString("cabangId", "") ?: ""
+        selectedCabangNama = prefs.getString("cabangNama", "Semua Cabang") ?: "Semua Cabang"
+        tvCurrentCabang.text = selectedCabangNama
 
         // Set Dynamic Greeting
         updateGreeting()
         loadTodayRevenue()
+        
+        findViewById<View>(R.id.tvCurrentCabang).setOnClickListener { showCabangSelector() }
 
         // Handle padding system UI
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -108,8 +121,14 @@ class MainActivity : AppCompatActivity() {
         val sdf = SimpleDateFormat("dd MMMM yyyy", Locale("id", "ID"))
         tvDate.text = sdf.format(Date())
 
-        val userName = "TokoKita"
-        tvGreeting.text = "$greetingText, $userName!"
+        FirebaseDatabase.getInstance().getReference("Settings").child("namaToko")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val userName = snapshot.value?.toString() ?: "TokoKita"
+                    tvGreeting.text = "$greetingText, $userName!"
+                }
+                override fun onCancelled(error: DatabaseError) {}
+            })
     }
 
     private fun loadTodayRevenue() {
@@ -122,7 +141,9 @@ class MainActivity : AppCompatActivity() {
                 for (snap in snapshot.children) {
                     val trx = snap.getValue(modelTransaksi::class.java)
                     if (trx != null && trx.tanggal?.startsWith(today) == true) {
-                        total += trx.totalHarga
+                        if (selectedCabangId.isEmpty() || trx.idCabang == selectedCabangId) {
+                            total += trx.totalHarga
+                        }
                     }
                 }
                 tvRevenue.text = "Rp %,d".format(total)
@@ -148,5 +169,39 @@ class MainActivity : AppCompatActivity() {
         
         dialog.setContentView(view)
         dialog.show()
+    }
+
+    private fun showCabangSelector() {
+        val ref = FirebaseDatabase.getInstance().getReference("Cabang")
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val list = mutableListOf<modelCabang>()
+                list.add(modelCabang("", "Semua Cabang", "", ""))
+                for (snap in snapshot.children) {
+                    snap.getValue(modelCabang::class.java)?.let { list.add(it) }
+                }
+                
+                val names = list.map { it.namaCabang ?: "" }.toTypedArray()
+                
+                android.app.AlertDialog.Builder(this@MainActivity)
+                    .setTitle("Pilih Cabang Kerja")
+                    .setItems(names) { _, which ->
+                        val selected = list[which]
+                        selectedCabangId = selected.idCabang ?: ""
+                        selectedCabangNama = selected.namaCabang ?: "Semua Cabang"
+                        
+                        tvCurrentCabang.text = selectedCabangNama
+                        
+                        getSharedPreferences("TokoKita", MODE_PRIVATE).edit()
+                            .putString("cabangId", selectedCabangId)
+                            .putString("cabangNama", selectedCabangNama)
+                            .apply()
+                            
+                        loadTodayRevenue()
+                    }
+                    .show()
+            }
+            override fun onCancelled(error: DatabaseError) {}
+        })
     }
 }
