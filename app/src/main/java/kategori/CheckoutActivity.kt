@@ -184,9 +184,13 @@ class CheckoutActivity : AppCompatActivity() {
 
         ref.child(id).setValue(transaksi).addOnSuccessListener {
             updateStock()
-            val intent = Intent(this, ReceiptActivity::class.java)
-            intent.putExtra("transaksi", transaksi)
-            startActivityForResult(intent, 200)
+            
+            // Pass the transaction data back to DataTransaksiActivity
+            val resultIntent = Intent()
+            resultIntent.putExtra("transaksi", transaksi)
+            setResult(RESULT_OK, resultIntent)
+            finish()
+
         }.addOnFailureListener {
             Toast.makeText(this, "Transaksi Gagal", Toast.LENGTH_SHORT).show()
         }
@@ -198,14 +202,6 @@ class CheckoutActivity : AppCompatActivity() {
             if (produk.tanpaBatas == true) continue
             val newStok = (produk.stokProduk ?: 0) - item.jumlah
             db.getReference("produk").child(produk.idProduk!!).child("stokProduk").setValue(newStok)
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 200 && resultCode == RESULT_OK) {
-            setResult(RESULT_OK)
-            finish()
         }
     }
 }

@@ -321,9 +321,18 @@ class DataTransaksiActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 100 && resultCode == RESULT_OK) {
+            // Clear Cart
             listCart.clear()
             adapterCart.notifyDataSetChanged()
             updateCartUI()
+
+            // Open Receipt Activity from here
+            val transaksi = data?.getParcelableExtra<model.modelTransaksi>("transaksi")
+            if (transaksi != null) {
+                val intent = Intent(this, ReceiptActivity::class.java)
+                intent.putExtra("transaksi", transaksi)
+                startActivity(intent)
+            }
         }
     }
 }
