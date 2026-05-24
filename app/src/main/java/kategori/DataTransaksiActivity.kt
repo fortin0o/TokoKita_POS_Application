@@ -218,14 +218,26 @@ class DataTransaksiActivity : AppCompatActivity() {
         val view = layoutInflater.inflate(R.layout.layout_cart_bottom_sheet, null)
         
         val rv = view.findViewById<RecyclerView>(R.id.rvCart)
-        val tvTotal = view.findViewById<TextView>(R.id.tvTotal)
+        val tvTotalDialog = view.findViewById<TextView>(R.id.tvTotal)
         val btnCheckout = view.findViewById<Button>(R.id.btnCheckout)
         val btnHapus = view.findViewById<Button>(R.id.btnHapus)
         val actKasir = view.findViewById<AutoCompleteTextView>(R.id.actKasir)
         val actPelanggan = view.findViewById<AutoCompleteTextView>(R.id.actPelanggan)
 
         rv.layoutManager = LinearLayoutManager(this)
-        rv.adapter = adapterCart
+        
+        // Re-assign adapter to update dialog UI in real-time
+        val dialogAdapter = adapter.CartAdapter(listCart) {
+            updateCartUI() // Update the background FAB
+            
+            // Refresh Dialog Total
+            var total = 0
+            for (item in listCart) total += (item.produk?.hargaJual ?: 0) * item.jumlah
+            tvTotalDialog.text = "Rp %,d".format(total)
+            
+            if (listCart.isEmpty()) dialog.dismiss()
+        }
+        rv.adapter = dialogAdapter
 
         // Load Kasir
         db.getReference("Pegawai").addListenerForSingleValueEvent(object : ValueEventListener {
@@ -276,21 +288,13 @@ class DataTransaksiActivity : AppCompatActivity() {
             selectedKasirName = actKasir.text.toString()
         }
         
-        fun refreshPopup() {
-            var total = 0
-            for (item in listCart) {
-                total += (item.produk?.hargaJual ?: 0) * item.jumlah
-            }
-            tvTotal.text = "Rp %,d".format(total)
-            if (listCart.isEmpty()) dialog.dismiss()
-            updateCartUI()
-        }
-        
-        refreshPopup()
+        // Initial Total for dialog
+        var totalInitial = 0
+        for (item in listCart) totalInitial += (item.produk?.hargaJual ?: 0) * item.jumlah
+        tvTotalDialog.text = "Rp %,d".format(totalInitial)
 
         btnHapus.setOnClickListener {
             listCart.clear()
-            adapterCart.notifyDataSetChanged()
             updateCartUI()
             dialog.dismiss()
         }
