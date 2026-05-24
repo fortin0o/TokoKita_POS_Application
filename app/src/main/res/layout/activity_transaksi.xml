@@ -149,10 +149,10 @@
                     android:textSize="14sp" />
 
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_marginStart="8dp"
-                    android:src="@android:drawable/ic_menu_send"
+                    android:src="@drawable/transaction"
                     app:tint="@color/white" />
             </LinearLayout>
         </RelativeLayout>
