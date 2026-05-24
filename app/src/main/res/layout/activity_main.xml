@@ -223,7 +223,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="24dp"
             android:layout_marginTop="24dp"
-            android:text="Siap melayani pelanggan dengan setulus hati\nJangan Kecewakan Pelanggan"
+            android:text="Hidup kadang-kidding, mending kita refreshing\nLayani pelanggan sepenuh hati"
             android:textColor="@color/text_gray"
             android:textSize="12sp"
             app:layout_constraintTop_toBottomOf="@id/cardSummary" />
