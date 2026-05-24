@@ -45,19 +45,7 @@ class TambahCabangActivity : AppCompatActivity() {
         ivBack = findViewById(R.id.ivBack)
 
         if (cabangExisting != null) {
-            findViewById<android.widget.TextView>(R.id.headerLayout).parent.let { it as android.view.ViewGroup }.let { group ->
-                 for (i in 0 until group.childCount) {
-                     if (group.getChildAt(i) is android.view.ViewGroup) {
-                         val inner = group.getChildAt(i) as android.view.ViewGroup
-                         for (j in 0 until inner.childCount) {
-                             if (inner.getChildAt(j) is android.widget.LinearLayout) {
-                                 val texts = inner.getChildAt(j) as android.widget.LinearLayout
-                                 (texts.getChildAt(0) as android.widget.TextView).text = "Ubah Cabang"
-                             }
-                         }
-                     }
-                 }
-            }
+            findViewById<android.widget.TextView>(R.id.tvJudul).text = "Ubah Cabang"
             etNamaCabang.setText(cabangExisting?.namaCabang)
             etAlamatCabang.setText(cabangExisting?.alamatCabang)
             actStatus.setText(cabangExisting?.statusCabang, false)
