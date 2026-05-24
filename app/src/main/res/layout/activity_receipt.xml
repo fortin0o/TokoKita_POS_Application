@@ -302,57 +302,59 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/surface_white"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:padding="16dp"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnBagikan"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="0dp"
-            android:layout_height="56dp"
-            android:layout_weight="1"
-            android:text="BAGIKAN"
-            android:textAllCaps="false"
-            android:textColor="@color/primary_teal"
-            android:textSize="12sp"
-            app:cornerRadius="12dp"
-            app:icon="@android:drawable/ic_menu_share"
-            app:iconTint="@color/primary_teal"
-            app:strokeColor="@color/primary_teal" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-        <View
-            android:layout_width="12dp"
-            android:layout_height="match_parent" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnBagikan"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:text="BAGIKAN"
+                android:textAllCaps="false"
+                android:textColor="@color/primary_teal"
+                android:textSize="14sp"
+                app:cornerRadius="12dp"
+                app:icon="@android:drawable/ic_menu_share"
+                app:iconTint="@color/primary_teal"
+                app:strokeColor="@color/primary_teal" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnCetak"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="0dp"
-            android:layout_height="56dp"
-            android:layout_weight="1"
-            android:text="CETAK"
-            android:textAllCaps="false"
-            android:textColor="@color/primary_teal"
-            android:textSize="12sp"
-            app:cornerRadius="12dp"
-            app:icon="@android:drawable/ic_menu_agenda"
-            app:iconTint="@color/primary_teal"
-            app:strokeColor="@color/primary_teal" />
+            <View
+                android:layout_width="12dp"
+                android:layout_height="match_parent" />
 
-        <View
-            android:layout_width="12dp"
-            android:layout_height="match_parent" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCetak"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:text="CETAK"
+                android:textAllCaps="false"
+                android:textColor="@color/primary_teal"
+                android:textSize="14sp"
+                app:cornerRadius="12dp"
+                app:icon="@android:drawable/ic_menu_agenda"
+                app:iconTint="@color/primary_teal"
+                app:strokeColor="@color/primary_teal" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/btnSelesai"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:layout_weight="1.2"
+            android:layout_marginTop="12dp"
             android:backgroundTint="@color/primary_teal"
             android:text="SELESAI"
             android:textAllCaps="false"
-            android:textSize="12sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             app:cornerRadius="12dp" />
     </LinearLayout>
