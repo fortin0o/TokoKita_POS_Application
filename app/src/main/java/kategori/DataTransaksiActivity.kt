@@ -163,6 +163,17 @@ class DataTransaksiActivity : AppCompatActivity() {
 
     private fun addToCart(produk: modelProduk) {
         val existing = listCart.find { it.produk?.idProduk == produk.idProduk }
+        val currentQty = existing?.jumlah ?: 0
+        
+        // Logic check for stock
+        if (produk.tanpaBatas != true) {
+            val stock = produk.stokProduk ?: 0
+            if (currentQty + 1 > stock) {
+                Toast.makeText(this, "Stok tidak mencukupi (Tersisa $stock)", Toast.LENGTH_SHORT).show()
+                return
+            }
+        }
+
         if (existing != null) {
             existing.jumlah++
         } else {

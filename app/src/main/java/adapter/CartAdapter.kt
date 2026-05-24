@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.donald.aplikasikedua.R
 import model.modelCartItem
@@ -35,6 +36,14 @@ class CartAdapter(
         holder.tvJumlah.text = item.jumlah.toString()
 
         holder.btnPlus.setOnClickListener {
+            val produk = item.produk
+            if (produk?.tanpaBatas != true) {
+                val stock = produk?.stokProduk ?: 0
+                if (item.jumlah + 1 > stock) {
+                    Toast.makeText(holder.itemView.context, "Stok tidak mencukupi", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+            }
             item.jumlah++
             notifyItemChanged(position)
             onUpdate()

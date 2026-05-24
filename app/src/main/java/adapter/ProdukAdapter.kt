@@ -57,11 +57,11 @@ class ProdukAdapter(private val list: ArrayList<modelProduk>) :
             holder.status.chipStrokeWidth = 0f
         }
 
-        // ✅ Placeholder gambar (sementara)
+
         holder.img.setImageResource(android.R.drawable.ic_menu_gallery)
 
 
-        // 🔥 Klik item
+
         holder.itemView.setOnClickListener {
             val intent = Intent(holder.itemView.context, TambahProdukActivity::class.java)
             intent.putExtra("produk", data)
@@ -78,7 +78,6 @@ class ProdukAdapter(private val list: ArrayList<modelProduk>) :
         }
     }
 
-    // 🔥 WAJIB untuk search biar smooth
     fun updateData(newList: List<modelProduk>) {
         list.clear()
         list.addAll(newList)
