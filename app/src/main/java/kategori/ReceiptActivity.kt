@@ -8,6 +8,8 @@ import android.bluetooth.BluetoothSocket
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -236,6 +238,21 @@ class ReceiptActivity : AppCompatActivity() {
 
                 outputStream.write(escInit)
                 
+                // Print Logo if enabled
+                if (showLogoInPrint) {
+                    try {
+                        val logoBitmap = BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher)
+                        if (logoBitmap != null) {
+                            val scaledBitmap = Bitmap.createScaledBitmap(logoBitmap, 180, 180, true)
+                            outputStream.write(escCenter)
+                            outputStream.write(decodeBitmap(scaledBitmap))
+                            outputStream.write("\n".toByteArray())
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+
                 // Header
                 outputStream.write(escCenter)
                 outputStream.write(escBoldOn)
@@ -292,6 +309,45 @@ class ReceiptActivity : AppCompatActivity() {
                 try { socket?.close() } catch (ex: Exception) {}
             }
         }.start()
+    }
+
+    private fun decodeBitmap(bmp: Bitmap): ByteArray {
+        val width = bmp.width
+        val height = bmp.height
+        val bwWidth = (width + 7) / 8 * 8
+        val bwHeight = height
+        
+        val data = ByteArray(bwWidth * bwHeight / 8 + 8)
+        data[0] = 0x1D // GS
+        data[1] = 0x76 // v
+        data[2] = 0x30 // 0
+        data[3] = 0x00 // m
+        data[4] = (bwWidth / 8 % 256).toByte() // xL
+        data[5] = (bwWidth / 8 / 256).toByte() // xH
+        data[6] = (bwHeight % 256).toByte() // yL
+        data[7] = (bwHeight / 256).toByte() // yH
+
+        var k = 8
+        for (i in 0 until bwHeight) {
+            for (j in 0 until bwWidth / 8) {
+                var temp = 0
+                for (b in 0 until 8) {
+                    val x = j * 8 + b
+                    if (x < width) {
+                        val pixel = bmp.getPixel(x, i)
+                        val r = (pixel shr 16) and 0xff
+                        val g = (pixel shr 8) and 0xff
+                        val b_val = pixel and 0xff
+                        val gray = (r * 0.299 + g * 0.587 + b_val * 0.114).toInt()
+                        if (gray < 128) {
+                            temp = temp or (1 shl (7 - b))
+                        }
+                    }
+                }
+                data[k++] = temp.toByte()
+            }
+        }
+        return data
     }
 
     private fun shareReceipt(trx: modelTransaksi) {
