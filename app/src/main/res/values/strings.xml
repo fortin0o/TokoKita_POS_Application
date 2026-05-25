@@ -2,13 +2,10 @@
 <resources>
     <string name="app_name">Aplikasi Kedua</string>
     <string name="greeting_format">%1$s, %2$s!</string>
-
-    <!-- Build Error Fix: Missing Strings -->
     <string name="title_tambah_kategori">Tambah Kategori</string>
     <string name="hint_nama_kategori">Nama Kategori</string>
     <string name="hint_status">Status</string>
     <string name="btn_simpan">Simpan</string>
-
     <string-array name="status_array">
         <item>Aktif</item>
         <item>Tidak Aktif</item>
