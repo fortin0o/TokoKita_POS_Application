@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity() {
             else -> "Selamat Malam"
         }
 
-        // Use modern Locale for Language Tag to avoid deprecation
+        // Fixed deprecated Locale
         val localeID = Locale.forLanguageTag("id-ID")
         val sdf = SimpleDateFormat("dd MMMM yyyy", localeID)
         tvDate.text = sdf.format(Date())
@@ -143,7 +143,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showProfileBottomSheet() {
         val dialog = BottomSheetDialog(this)
-        // Pass the activity's root content view as the parent to resolve layout parameters correctly
+        // Pass the activity's root view as the parent to resolve layout parameters correctly
         val root = findViewById<ViewGroup>(android.R.id.content)
         val view = layoutInflater.inflate(R.layout.layout_profile_bottom_sheet, root, false)
         
@@ -189,7 +189,7 @@ class MainActivity : AppCompatActivity() {
                         selectedCabangNama = selected.namaCabang ?: "Semua Cabang"
                         tvCurrentCabang.text = selectedCabangNama
                         
-                        // Use KTX SharedPreferences.edit extension
+                        // Use KTX edit extension
                         getSharedPreferences("TokoKita", MODE_PRIVATE).edit {
                             putString("cabangId", selectedCabangId)
                             putString("cabangNama", selectedCabangNama)
