@@ -1,12 +1,21 @@
 package kategori
 
+import android.Manifest
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothManager
+import android.bluetooth.BluetoothSocket
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -15,6 +24,8 @@ import com.google.firebase.database.*
 import model.modelTransaksi
 import java.io.File
 import java.io.FileOutputStream
+import java.io.OutputStream
+import java.util.*
 
 class ReceiptActivity : AppCompatActivity() {
 
@@ -39,17 +50,21 @@ class ReceiptActivity : AppCompatActivity() {
 
     private var autoPrint = false
     private var printerAddress: String? = null
+    private var printerName: String? = "Printer"
     private var showLogoInPrint = true
     
     private var namaToko = "TOKOKITA POS"
     private var headerStruk = ""
+    private var currentTransaksi: modelTransaksi? = null
+
+    private val PRINTER_UUID: UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_receipt)
 
-        val transaksi = intent.getParcelableExtra<modelTransaksi>("transaksi")
+        currentTransaksi = intent.getParcelableExtra<modelTransaksi>("transaksi")
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -61,10 +76,10 @@ class ReceiptActivity : AppCompatActivity() {
         loadSettings()
         loadPrinterSettings()
 
-        if (transaksi != null) {
-            populateData(transaksi)
+        currentTransaksi?.let {
+            populateData(it)
             if (autoPrint) {
-                printReceipt(transaksi)
+                checkPermissionAndPrint(it)
             }
         }
 
@@ -74,14 +89,12 @@ class ReceiptActivity : AppCompatActivity() {
         }
         
         btnBagikan.setOnClickListener {
-            if (transaksi != null) {
-                shareReceipt(transaksi)
-            }
+            currentTransaksi?.let { shareReceipt(it) }
         }
 
         btnCetak.setOnClickListener {
-            if (transaksi != null) {
-                printReceipt(transaksi)
+            currentTransaksi?.let { checkPermissionAndPrint(it) } ?: run {
+                Toast.makeText(this, "Data transaksi tidak ditemukan", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -113,10 +126,8 @@ class ReceiptActivity : AppCompatActivity() {
                 if (snapshot.exists()) {
                     namaToko = snapshot.child("namaToko").value?.toString() ?: "TOKOKITA POS"
                     headerStruk = snapshot.child("headerStruk").value?.toString() ?: ""
-                    
                     tvStoreName.text = namaToko
                     tvStoreHeader.text = if (headerStruk.isNotEmpty()) headerStruk else "Solusi Point of Sale Pintar"
-                    
                     val footer = snapshot.child("footerStruk").value?.toString() ?: ""
                     if (footer.isNotEmpty()) tvFooter.text = footer
                 }
@@ -126,9 +137,10 @@ class ReceiptActivity : AppCompatActivity() {
     }
 
     private fun loadPrinterSettings() {
-        val prefs = getSharedPreferences("PrinterSettings", android.content.Context.MODE_PRIVATE)
+        val prefs = getSharedPreferences("PrinterSettings", Context.MODE_PRIVATE)
         autoPrint = prefs.getBoolean("autoPrint", false)
         printerAddress = prefs.getString("printerAddress", null)
+        printerName = prefs.getString("printerName", "Printer")
         showLogoInPrint = prefs.getBoolean("showLogo", true)
     }
 
@@ -137,10 +149,8 @@ class ReceiptActivity : AppCompatActivity() {
         tvDate.text = trx.tanggal
         tvKasir.text = trx.namaPegawai
         tvPelanggan.text = trx.namaPelanggan ?: "Umum"
-        
         tvSubtotal.text = "Rp %,d".format(trx.totalHarga)
         tvTotal.text = "Rp %,d".format(trx.totalHarga)
-        
         tvMetodeLabel.text = "Metode Pembayaran (${trx.metodePembayaran})"
         tvMetodeValue.text = trx.metodePembayaran
         
@@ -163,99 +173,145 @@ class ReceiptActivity : AppCompatActivity() {
         }
     }
 
-    private fun shareReceipt(trx: modelTransaksi) {
-        // Prepare thermal print data (Standard 32-char width)
-        // Generate formatted text for sharing
-        val sb = StringBuilder()
-        sb.append("===== $namaToko =====\n")
-        if (headerStruk.isNotEmpty()) sb.append("$headerStruk\n")
-        sb.append("ID: ${trx.idTransaksi}\n")
-        sb.append("Tgl: ${trx.tanggal}\n")
-        sb.append("Kasir: ${trx.namaPegawai}\n")
-        sb.append("Plg: ${trx.namaPelanggan ?: "Umum"}\n")
-        sb.append("--------------------------------\n")
-        
-        trx.listProduk?.forEach { item ->
-            val subtotal = (item.produk?.hargaJual ?: 0) * item.jumlah
-            sb.append("${item.produk?.namaProduk}\n")
-            sb.append("${item.jumlah} x ${item.produk?.hargaJual} = Rp %,d\n".format(subtotal))
+    private fun checkPermissionAndPrint(trx: modelTransaksi) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.BLUETOOTH_CONNECT), 200)
+                return
+            }
         }
-        
-        sb.append("--------------------------------\n")
-        sb.append("TOTAL: Rp %,d\n".format(trx.totalHarga))
-        
-        if (trx.metodePembayaran == "Tunai") {
-            sb.append("Bayar: Rp %,d\n".format(trx.uangDiterima))
-            sb.append("Kembali: Rp %,d\n".format(trx.uangDiterima - trx.totalHarga))
-        }
-        
-        sb.append("--------------------------------\n")
-        val footer = tvFooter.text.toString()
-        sb.append("$footer\n")
+        printReceipt(trx)
+    }
 
-        try {
-            val file = File(getExternalFilesDir(null), "Struk_${trx.idTransaksi}.txt")
-            val out = FileOutputStream(file)
-            out.write(sb.toString().toByteArray())
-            out.close()
-
-            val uri = FileProvider.getUriForFile(this, "${packageName}.provider", file)
-            val intent = Intent(Intent.ACTION_SEND)
-            intent.type = "text/plain"
-            intent.putExtra(Intent.EXTRA_STREAM, uri)
-            intent.putExtra(Intent.EXTRA_TEXT, sb.toString())
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            startActivity(Intent.createChooser(intent, "Bagikan Struk"))
-            
-        } catch (e: Exception) {
-            Toast.makeText(this, "Gagal membagikan: ${e.message}", Toast.LENGTH_SHORT).show()
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 200 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            currentTransaksi?.let { printReceipt(it) }
         }
     }
 
     private fun printReceipt(trx: modelTransaksi) {
         if (printerAddress == null) {
-            Toast.makeText(this, "Printer belum diatur. Silakan atur di Pengaturan Printer.", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Printer belum dipilih di menu Pengaturan Printer", Toast.LENGTH_LONG).show()
             return
         }
 
-        // Prepare thermal print data (Standard 32-char width)
-        // Generate formatted text for sharing
-        val sb = StringBuilder()
-        if (showLogoInPrint) sb.append("[LOGO]\n")
-        sb.append("$namaToko\n")
-        sb.append("$headerStruk\n")
-        sb.append("--------------------------------\n")
-        sb.append("ID: ${trx.idTransaksi}\n")
-        sb.append("Tgl: ${trx.tanggal}\n")
-        sb.append("Kasir: ${trx.namaPegawai}\n")
-        sb.append("Plg: ${trx.namaPelanggan ?: "Umum"}\n")
-        sb.append("--------------------------------\n")
-        
-        trx.listProduk?.forEach { item ->
-            sb.append("${item.produk?.namaProduk}\n")
-            val qtyPrice = "${item.jumlah} x ${item.produk?.hargaJual}"
-            val total = "Rp %,d".format((item.produk?.hargaJual ?: 0) * item.jumlah)
-            sb.append(qtyPrice.padEnd(32 - total.length) + total + "\n")
-        }
-        
-        sb.append("--------------------------------\n")
-        val totalLabel = "TOTAL"
-        val totalValue = "Rp %,d".format(trx.totalHarga)
-        sb.append(totalLabel.padEnd(32 - totalValue.length) + totalValue + "\n")
-        
-        if (trx.metodePembayaran == "Tunai") {
-            val bayarLabel = "Bayar"
-            val bayarValue = "Rp %,d".format(trx.uangDiterima)
-            sb.append(bayarLabel.padEnd(32 - bayarValue.length) + bayarValue + "\n")
-            
-            val kembaliLabel = "Kembali"
-            val kembaliValue = "Rp %,d".format(trx.uangDiterima - trx.totalHarga)
-            sb.append(kembaliLabel.padEnd(32 - kembaliValue.length) + kembaliValue + "\n")
-        }
-        
-        sb.append("--------------------------------\n")
-        sb.append("${tvFooter.text}\n\n\n")
+        val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+        val bluetoothAdapter = bluetoothManager.adapter
 
-        Toast.makeText(this, "Mengirim data ke printer: ${getSharedPreferences("PrinterSettings", android.content.Context.MODE_PRIVATE).getString("printerName", "Printer")}", Toast.LENGTH_SHORT).show()
+        if (bluetoothAdapter == null || !bluetoothAdapter.isEnabled) {
+            Toast.makeText(this, "Bluetooth tidak aktif", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        Toast.makeText(this, "Menghubungkan ke $printerName...", Toast.LENGTH_SHORT).show()
+
+        Thread {
+            var socket: BluetoothSocket? = null
+            try {
+                val device: BluetoothDevice = bluetoothAdapter.getRemoteDevice(printerAddress)
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && 
+                    ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                    return@Thread
+                }
+
+                // Attempt to connect (Try Secure first, then Insecure fallback)
+                try {
+                    socket = device.createRfcommSocketToServiceRecord(PRINTER_UUID)
+                    socket.connect()
+                } catch (e: Exception) {
+                    socket = device.createInsecureRfcommSocketToServiceRecord(PRINTER_UUID)
+                    socket.connect()
+                }
+
+                val outputStream: OutputStream = socket.outputStream
+
+                // ESC/POS Commands
+                val escInit = byteArrayOf(0x1B, 0x40)
+                val escCenter = byteArrayOf(0x1B, 0x61, 0x01)
+                val escLeft = byteArrayOf(0x1B, 0x61, 0x00)
+                val escBoldOn = byteArrayOf(0x1B, 0x45, 0x01)
+                val escBoldOff = byteArrayOf(0x1B, 0x45, 0x00)
+
+                outputStream.write(escInit)
+                
+                // Header
+                outputStream.write(escCenter)
+                outputStream.write(escBoldOn)
+                outputStream.write("$namaToko\n".toByteArray())
+                outputStream.write(escBoldOff)
+                if (headerStruk.isNotEmpty()) outputStream.write("$headerStruk\n".toByteArray())
+                outputStream.write("--------------------------------\n".toByteArray())
+
+                // Transaction Info
+                outputStream.write(escLeft)
+                outputStream.write("ID: ${trx.idTransaksi}\n".toByteArray())
+                outputStream.write("Tgl: ${trx.tanggal}\n".toByteArray())
+                outputStream.write("Kasir: ${trx.namaPegawai}\n".toByteArray())
+                outputStream.write("Plg: ${trx.namaPelanggan ?: "Umum"}\n".toByteArray())
+                outputStream.write("--------------------------------\n".toByteArray())
+
+                // Items
+                trx.listProduk?.forEach { item ->
+                    outputStream.write("${item.produk?.namaProduk}\n".toByteArray())
+                    val qtyPrice = "${item.jumlah} x Rp %,d".format(item.produk?.hargaJual ?: 0)
+                    val total = "Rp %,d".format((item.produk?.hargaJual ?: 0) * item.jumlah)
+                    val paddingCount = (32 - qtyPrice.length - total.length).coerceAtLeast(1)
+                    val padding = " ".repeat(paddingCount)
+                    outputStream.write("$qtyPrice$padding$total\n".toByteArray())
+                }
+
+                outputStream.write("--------------------------------\n".toByteArray())
+
+                // Totals
+                val totalValue = "Rp %,d".format(trx.totalHarga)
+                outputStream.write(escBoldOn)
+                outputStream.write("TOTAL${" ".repeat((32 - 5 - totalValue.length).coerceAtLeast(1))}$totalValue\n".toByteArray())
+                outputStream.write(escBoldOff)
+
+                if (trx.metodePembayaran == "Tunai") {
+                    val bVal = "Rp %,d".format(trx.uangDiterima)
+                    outputStream.write("Bayar${" ".repeat((32 - 5 - bVal.length).coerceAtLeast(1))}$bVal\n".toByteArray())
+                    val kVal = "Rp %,d".format(trx.uangDiterima - trx.totalHarga)
+                    outputStream.write("Kembali${" ".repeat((32 - 7 - kVal.length).coerceAtLeast(1))}$kVal\n".toByteArray())
+                }
+                
+                outputStream.write("--------------------------------\n".toByteArray())
+                outputStream.write(escCenter)
+                val footerText = tvFooter.text.toString()
+                outputStream.write("${footerText}\n".toByteArray())
+                outputStream.write("\n\n\n".toByteArray())
+
+                outputStream.flush()
+                runOnUiThread { Toast.makeText(this, "Berhasil mencetak!", Toast.LENGTH_SHORT).show() }
+
+            } catch (e: Exception) {
+                runOnUiThread { Toast.makeText(this, "Gagal: ${e.localizedMessage}", Toast.LENGTH_LONG).show() }
+            } finally {
+                try { socket?.close() } catch (ex: Exception) {}
+            }
+        }.start()
+    }
+
+    private fun shareReceipt(trx: modelTransaksi) {
+        val sb = StringBuilder()
+        sb.append("===== $namaToko =====\n")
+        sb.append("ID: ${trx.idTransaksi}\n")
+        sb.append("TOTAL: Rp %,d\n".format(trx.totalHarga))
+        
+        try {
+            val file = File(getExternalFilesDir(null), "Struk.txt")
+            FileOutputStream(file).use { it.write(sb.toString().toByteArray()) }
+            val uri = FileProvider.getUriForFile(this, "${packageName}.provider", file)
+            val intent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_STREAM, uri)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+            startActivity(Intent.createChooser(intent, "Bagikan Struk"))
+        } catch (e: Exception) {
+            Toast.makeText(this, "Gagal: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
     }
 }

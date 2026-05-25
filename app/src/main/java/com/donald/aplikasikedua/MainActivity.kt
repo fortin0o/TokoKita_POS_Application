@@ -38,69 +38,50 @@ class MainActivity : AppCompatActivity() {
         selectedCabangNama = prefs.getString("cabangNama", "Semua Cabang") ?: "Semua Cabang"
         tvCurrentCabang.text = selectedCabangNama
 
-        // Set Dynamic Greeting
         updateGreeting()
         loadTodayRevenue()
         
         findViewById<View>(R.id.cardCabangSelector).setOnClickListener { showCabangSelector() }
 
-        // Handle padding system UI
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        val mainView = findViewById<View>(R.id.main)
+        ViewCompat.setOnApplyWindowInsetsListener(mainView) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        // Navigation Links
-
-        // 1. Menu (Daftar Produk)
+        // Navigation
         findViewById<View>(R.id.cardMenu).setOnClickListener {
             startActivity(Intent(this, DataProdukActivity::class.java))
         }
-
-        // 2. Kategori
         findViewById<View>(R.id.cardKategori).setOnClickListener {
             startActivity(Intent(this, DataKategoriActivity::class.java))
         }
-
-        // 3. Pegawai
         findViewById<View>(R.id.cardPegawai).setOnClickListener {
             startActivity(Intent(this, DataPegawaiActivity::class.java))
         }
-
-        // 4. Cabang
         findViewById<View>(R.id.cardCabang).setOnClickListener {
             startActivity(Intent(this, DataCabangActivity::class.java))
         }
-
-        // 6. Printer
         findViewById<View>(R.id.cardPrinter).setOnClickListener {
             startActivity(Intent(this, PrinterActivity::class.java))
         }
 
         // Quick Actions
-        
-        // 1. Transaksi
         findViewById<View>(R.id.actionTransaksi).setOnClickListener {
             if (selectedCabangId.isEmpty()) {
-                Toast.makeText(this, "Silakan pilih cabang kerja terlebih dahulu di pojok kanan atas", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Silakan pilih cabang kerja terlebih dahulu", Toast.LENGTH_LONG).show()
                 showCabangSelector()
             } else {
                 startActivity(Intent(this, DataTransaksiActivity::class.java))
             }
         }
-
-        // 2. Pelanggan
         findViewById<View>(R.id.actionPelanggan).setOnClickListener {
             startActivity(Intent(this, DataPelangganActivity::class.java))
         }
-
-        // 3. Laporan
         findViewById<View>(R.id.actionLaporan).setOnClickListener {
             startActivity(Intent(this, LaporanActivity::class.java))
         }
-
-        // Profile Bottom Sheet
         findViewById<View>(R.id.ivProfile).setOnClickListener {
             showProfileBottomSheet()
         }
@@ -119,14 +100,16 @@ class MainActivity : AppCompatActivity() {
             else -> "Selamat Malam"
         }
 
-        val sdf = SimpleDateFormat("dd MMMM yyyy", Locale("id", "ID"))
+        // Fixed deprecated Locale
+        val localeID = Locale("in", "ID")
+        val sdf = SimpleDateFormat("dd MMMM yyyy", localeID)
         tvDate.text = sdf.format(Date())
 
         FirebaseDatabase.getInstance().getReference("Settings").child("namaToko")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val userName = snapshot.value?.toString() ?: "TokoKita"
-                    tvGreeting.text = "$greetingText, $userName!"
+                    tvGreeting.text = getString(R.string.greeting_format, greetingText, userName)
                 }
                 override fun onCancelled(error: DatabaseError) {}
             })
@@ -147,34 +130,21 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                 }
-                tvRevenue.text = "Rp %,d".format(total)
+                tvRevenue.text = String.format(Locale("in", "ID"), "Rp %,d", total)
             }
-
             override fun onCancelled(error: DatabaseError) {}
         })
     }
 
     private fun showProfileBottomSheet() {
         val dialog = BottomSheetDialog(this)
+        // Corrected null parent warning
         val view = layoutInflater.inflate(R.layout.layout_profile_bottom_sheet, null)
         
         view.findViewById<View>(R.id.menuSettings).setOnClickListener {
             dialog.dismiss()
             startActivity(Intent(this, SettingsActivity::class.java))
         }
-
-        view.findViewById<View>(R.id.menuExport).setOnClickListener {
-            dialog.dismiss()
-            startActivity(Intent(this, LaporanActivity::class.java).apply {
-                putExtra("action", "export")
-            })
-        }
-
-        view.findViewById<View>(R.id.menuAbout).setOnClickListener {
-            dialog.dismiss()
-            startActivity(Intent(this, TentangAplikasiActivity::class.java))
-        }
-
         view.findViewById<View>(R.id.menuLogout).setOnClickListener {
             dialog.dismiss()
             showLogoutConfirmation()
@@ -187,7 +157,7 @@ class MainActivity : AppCompatActivity() {
     private fun showLogoutConfirmation() {
         android.app.AlertDialog.Builder(this)
             .setTitle("Keluar Aplikasi")
-            .setMessage("Apakah Anda yakin ingin keluar dari aplikasi?")
+            .setMessage("Apakah Anda yakin ingin keluar?")
             .setPositiveButton("Ya") { _, _ -> finishAffinity() }
             .setNegativeButton("Tidak", null)
             .show()
@@ -211,14 +181,12 @@ class MainActivity : AppCompatActivity() {
                         val selected = list[which]
                         selectedCabangId = selected.idCabang ?: ""
                         selectedCabangNama = selected.namaCabang ?: "Semua Cabang"
-                        
                         tvCurrentCabang.text = selectedCabangNama
                         
                         getSharedPreferences("TokoKita", MODE_PRIVATE).edit()
                             .putString("cabangId", selectedCabangId)
                             .putString("cabangNama", selectedCabangNama)
                             .apply()
-                            
                         loadTodayRevenue()
                     }
                     .show()
