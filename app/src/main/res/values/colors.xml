@@ -20,4 +20,8 @@
     <color name="summary_bg">#FFF9C4</color>
     <color name="divider_color">#E0E0E0</color>
     <color name="chip_unselected_bg">#E0E0E0</color>
+    
+    <!-- Chip Status Colors -->
+    <color name="chip_bg_status">#E8F1F3</color>
+    <color name="chip_text_status">#588A96</color>
 </resources>

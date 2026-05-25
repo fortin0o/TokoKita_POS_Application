@@ -27,6 +27,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@android:drawable/ic_menu_revert"
+                android:contentDescription="Back"
                 app:tint="@color/brand_cream" />
 
             <LinearLayout
@@ -139,6 +140,7 @@
                             android:layout_height="match_parent"
                             android:scaleType="centerInside"
                             android:src="@drawable/pegawai"
+                            android:contentDescription="Product Preview"
                             app:tint="@color/red" />
                     </com.google.android.material.card.MaterialCardView>
 
