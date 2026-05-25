@@ -3,10 +3,12 @@ package com.donald.aplikasikedua
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -44,10 +46,12 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.cardCabangSelector).setOnClickListener { showCabangSelector() }
 
         val mainView = findViewById<View>(R.id.main)
-        ViewCompat.setOnApplyWindowInsetsListener(mainView) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+        if (mainView != null) {
+            ViewCompat.setOnApplyWindowInsetsListener(mainView) { v, insets ->
+                val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+                insets
+            }
         }
 
         // Navigation
@@ -100,8 +104,8 @@ class MainActivity : AppCompatActivity() {
             else -> "Selamat Malam"
         }
 
-        // Fixed deprecated Locale
-        val localeID = Locale("in", "ID")
+        // Use modern Locale for Language Tag to avoid deprecation
+        val localeID = Locale.forLanguageTag("id-ID")
         val sdf = SimpleDateFormat("dd MMMM yyyy", localeID)
         tvDate.text = sdf.format(Date())
 
@@ -130,7 +134,8 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                 }
-                tvRevenue.text = String.format(Locale("in", "ID"), "Rp %,d", total)
+                // Use modern Locale for Language Tag
+                tvRevenue.text = String.format(Locale.forLanguageTag("id-ID"), "Rp %,d", total)
             }
             override fun onCancelled(error: DatabaseError) {}
         })
@@ -138,8 +143,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun showProfileBottomSheet() {
         val dialog = BottomSheetDialog(this)
-        // Corrected null parent warning
-        val view = layoutInflater.inflate(R.layout.layout_profile_bottom_sheet, null)
+        // Pass the activity's root content view as the parent to resolve layout parameters correctly
+        val root = findViewById<ViewGroup>(android.R.id.content)
+        val view = layoutInflater.inflate(R.layout.layout_profile_bottom_sheet, root, false)
         
         view.findViewById<View>(R.id.menuSettings).setOnClickListener {
             dialog.dismiss()
@@ -183,10 +189,11 @@ class MainActivity : AppCompatActivity() {
                         selectedCabangNama = selected.namaCabang ?: "Semua Cabang"
                         tvCurrentCabang.text = selectedCabangNama
                         
-                        getSharedPreferences("TokoKita", MODE_PRIVATE).edit()
-                            .putString("cabangId", selectedCabangId)
-                            .putString("cabangNama", selectedCabangNama)
-                            .apply()
+                        // Use KTX SharedPreferences.edit extension
+                        getSharedPreferences("TokoKita", MODE_PRIVATE).edit {
+                            putString("cabangId", selectedCabangId)
+                            putString("cabangNama", selectedCabangNama)
+                        }
                         loadTodayRevenue()
                     }
                     .show()
