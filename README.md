@@ -19,7 +19,7 @@ The central hub for all activities, showing today's revenue and quick access men
 
 | Main Dashboard | Branch Selector | Control Panel | Exit Dialog |
 |:---:|:---:|:---:|:---:|
-| ![Dashboard](screenshots/dashboard.jpeg) | ![Branch Selector](screenshots/branch_selector.jpeg) | ![Control Panel](screenshots/control_panel.jpeg) | ![Exit Dialog](screenshots/logout.jpeg) |
+| ![Dashboard](screenshots/employee_list.jpeg) | ![Branch Selector](screenshots/branch_selector.jpeg) | ![Control Panel](screenshots/control_panel.jpeg) | ![Exit Dialog](screenshots/dashboard.jpeg) |
 
 ### 🛒 POS & Printing
 The cashier interface and printer configuration.
@@ -40,7 +40,7 @@ Managing your store locations and your team.
 
 | Cabang Toko | Tambah Cabang | Data Pegawai | Tambah Pegawai |
 |:---:|:---:|:---:|:---:|
-| ![Branch List](screenshots/branch_list.jpeg) | ![Add Branch](screenshots/add_branch.jpeg) | ![Employee List](screenshots/employee_list.jpeg) | ![Add Employee](screenshots/add_employee.jpeg) |
+| ![Branch List](screenshots/branch_list.jpeg) | ![Add Branch](screenshots/add_branch.jpeg) | ![Employee List](screenshots/dashboard.jpeg) | ![Add Employee](screenshots/add_employee.jpeg) |
 
 ---
 
