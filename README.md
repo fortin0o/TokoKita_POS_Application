@@ -14,31 +14,31 @@ TokoKita is a modern Point of Sale (POS) and Inventory Management system designe
 
 ## 📸 Application Preview
 
-### 🏠 Dashboard & Navigation
+### 🏠 Dashboard & Control
 The central hub for all activities, showing today's revenue and quick access menus.
 
-| Main Dashboard | Branch Selection | Control Panel |
-|:---:|:---:|:---:|
-| ![Dashboard](screenshots/dashboard.png) | ![Branch Selector](screenshots/branch_selector.png) | ![Control Panel](screenshots/control_panel.png) |
+| Main Dashboard | Branch Selector | Control Panel | Exit Dialog |
+|:---:|:---:|:---:|:---:|
+| ![Dashboard](screenshots/dashboard.png) | ![Branch Selector](screenshots/branch_selector.png) | ![Control Panel](screenshots/control_panel.png) | ![Exit Dialog](screenshots/logout.png) |
 
-### 🛒 POS & Transactions
-The cashier interface where products are selected and transactions are processed.
+### 🛒 POS & Printing
+The cashier interface and printer configuration.
 
-| POS Interface | Printer Settings | Logout Confirmation |
+| POS Interface | Printer Settings | Receipt Settings |
 |:---:|:---:|:---:|
-| ![POS](screenshots/pos.png) | ![Printer](screenshots/printer_settings.png) | ![Logout](screenshots/logout.png) |
+| ![POS](screenshots/pos.png) | ![Printer](screenshots/printer_settings.png) | ![Receipt Settings](screenshots/receipt_settings.png) |
 
 ### 📦 Product & Category Management
-Tools to manage what you sell and how you categorize them.
+Tools to manage your inventory and classifications.
 
-| Product List | Add Product | Category List | Add Category |
+| Daftar Menu | Tambah Menu | Daftar Kategori | Tambah Kategori |
 |:---:|:---:|:---:|:---:|
 | ![Product List](screenshots/product_list.png) | ![Add Product](screenshots/add_product.png) | ![Category List](screenshots/category_list.png) | ![Add Category](screenshots/add_category.png) |
 
 ### 🏢 Branch & Employee Management
-Managing your team and your store locations.
+Managing your store locations and your team.
 
-| Branch List | Add Branch | Employee List | Add Employee |
+| Cabang Toko | Tambah Cabang | Data Pegawai | Tambah Pegawai |
 |:---:|:---:|:---:|:---:|
 | ![Branch List](screenshots/branch_list.png) | ![Add Branch](screenshots/add_branch.png) | ![Employee List](screenshots/employee_list.png) | ![Add Employee](screenshots/add_employee.png) |
 
