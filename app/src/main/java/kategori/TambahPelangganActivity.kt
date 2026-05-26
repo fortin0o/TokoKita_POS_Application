@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package kategori
 
 import android.os.Bundle
@@ -7,15 +9,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.donald.aplikasikedua.R
-import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.database.FirebaseDatabase
 import model.modelPelanggan
 
+@Suppress("SpellCheckingInspection", "SpellCheckingInspection", "unused")
 class TambahPelangganActivity : AppCompatActivity() {
 
     private lateinit var etNama: TextInputEditText
+    @Suppress("unused")
     private lateinit var etPhone: TextInputEditText
     private lateinit var etAlamat: TextInputEditText
     private lateinit var cgStatus: ChipGroup

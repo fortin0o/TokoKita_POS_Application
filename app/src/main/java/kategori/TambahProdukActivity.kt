@@ -22,6 +22,7 @@ import model.modelProduk
 class TambahProdukActivity : AppCompatActivity() {
 
     private val db = FirebaseDatabase.getInstance()
+    @Suppress("unused", "unused", "unused", "unused")
     private val ref = db.getReference("produk")
 
     private lateinit var etNama: TextInputEditText

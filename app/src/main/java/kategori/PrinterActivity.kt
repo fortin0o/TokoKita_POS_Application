@@ -146,11 +146,39 @@ class PrinterActivity : AppCompatActivity() {
     }
 
     private fun savePrinter(device: BluetoothDevice) {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.BLUETOOTH_CONNECT
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
         getSharedPreferences("PrinterSettings", Context.MODE_PRIVATE).edit()
             .putString("printerName", device.name)
             .putString("printerAddress", device.address)
             .apply()
-        
+
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.BLUETOOTH_CONNECT
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
         tvStatus.text = "Terhubung ke: ${device.name}"
         tvStatus.setTextColor(getColor(R.color.primary_teal))
         Toast.makeText(this, "Printer berhasil dipilih", Toast.LENGTH_SHORT).show()
