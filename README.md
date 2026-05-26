@@ -18,7 +18,7 @@ TokoKita is a modern Point of Sale (POS) and Inventory Management system designe
 The central hub for all activities, showing today's revenue and quick access menus.
 
 | Main Dashboard | Branch Selector | Control Panel 
-|:---:|:---:|:---:|:---:|
+|:---:|:---:|:---:|
 | ![Dashboard](screenshots/employee_list.jpeg) | ![Branch Selector](screenshots/branch_selector.jpeg) | ![Control Panel](screenshots/control_panel.jpeg) | 
 ### 🛒 POS & Printing
 The cashier interface and printer configuration.
