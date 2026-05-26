@@ -19,28 +19,28 @@ The central hub for all activities, showing today's revenue and quick access men
 
 | Main Dashboard | Branch Selector | Control Panel | Exit Dialog |
 |:---:|:---:|:---:|:---:|
-| ![Dashboard](screenshots/dashboard.png) | ![Branch Selector](screenshots/branch_selector.png) | ![Control Panel](screenshots/control_panel.png) | ![Exit Dialog](screenshots/logout.png) |
+| ![Dashboard](screenshots/dashboard.jpeg) | ![Branch Selector](screenshots/branch_selector.jpeg) | ![Control Panel](screenshots/control_panel.jpeg) | ![Exit Dialog](screenshots/logout.jpeg) |
 
 ### 🛒 POS & Printing
 The cashier interface and printer configuration.
 
 | POS Interface | Printer Settings | Receipt Settings |
 |:---:|:---:|:---:|
-| ![POS](screenshots/pos.png) | ![Printer](screenshots/printer_settings.png) | ![Receipt Settings](screenshots/receipt_settings.png) |
+| ![POS](screenshots/pos.jpeg) | ![Printer](screenshots/printer_settings.jpeg) | ![Receipt Settings](screenshots/receipt_settings.jpeg) |
 
 ### 📦 Product & Category Management
 Tools to manage your inventory and classifications.
 
 | Daftar Menu | Tambah Menu | Daftar Kategori | Tambah Kategori |
 |:---:|:---:|:---:|:---:|
-| ![Product List](screenshots/product_list.png) | ![Add Product](screenshots/add_product.png) | ![Category List](screenshots/category_list.png) | ![Add Category](screenshots/add_category.png) |
+| ![Product List](screenshots/product_list.jpeg) | ![Add Product](screenshots/add_product.jpeg) | ![Category List](screenshots/category_list.jpeg) | ![Add Category](screenshots/add_category.jpeg) |
 
 ### 🏢 Branch & Employee Management
 Managing your store locations and your team.
 
 | Cabang Toko | Tambah Cabang | Data Pegawai | Tambah Pegawai |
 |:---:|:---:|:---:|:---:|
-| ![Branch List](screenshots/branch_list.png) | ![Add Branch](screenshots/add_branch.png) | ![Employee List](screenshots/employee_list.png) | ![Add Employee](screenshots/add_employee.png) |
+| ![Branch List](screenshots/branch_list.jpeg) | ![Add Branch](screenshots/add_branch.jpeg) | ![Employee List](screenshots/employee_list.jpeg) | ![Add Employee](screenshots/add_employee.jpeg) |
 
 ---
 
