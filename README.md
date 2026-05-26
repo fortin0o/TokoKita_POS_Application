@@ -4,70 +4,59 @@ TokoKita is a modern Point of Sale (POS) and Inventory Management system designe
 
 ## 🚀 Features
 
-### 🛒 Point of Sale (POS)
-- Easy-to-use transaction interface with category filtering and search.
-- Interactive shopping cart with stock validation.
-- Quick payment options for cash transactions.
-- Support for multiple payment methods (Tunai, Transfer, QRIS).
+- **Multi-Branch Control:** Switch between branches easily and track revenue per location.
+- **Dynamic POS:** Category-based menu selection with real-time stock validation.
+- **Smart Inventory:** Profit margin calculators and barcode support.
+- **Thermal Printing:** Bluetooth integration for instant receipt printing with custom logos.
+- **Data Management:** Full CRUD for Products, Categories, Employees, and Branches.
 
-### 📦 Inventory & Product Management
-- Comprehensive product database with barcode support.
-- Profit margin calculator (Nominal or Percentage).
-- Automated stock tracking and "unlimited stock" option.
-- Categorization for easier navigation.
+---
 
-### 🏢 Multi-Branch Support
-- Manage multiple store locations from a single app.
-- Assign products and staff to specific branches.
-- Branch-specific revenue tracking.
+## 📸 Application Preview
 
-### 🖨️ Thermal Printing
-- Integrated Bluetooth thermal printer support.
-- Custom receipt headers and footers.
-- Optional store logo printing on receipts.
+### 🏠 Dashboard & Navigation
+The central hub for all activities, showing today's revenue and quick access menus.
 
-### 👥 Staff & Customer Management
-- Manage employee roles and access.
-- Track customer database and loyalty.
-
-### 📊 Reporting
-- Daily revenue summaries.
-- Detailed transaction history.
-
-## 📸 Screenshots
-
-| Main Dashboard | POS Interface | Checkout |
+| Main Dashboard | Branch Selection | Control Panel |
 |:---:|:---:|:---:|
-| ![Main Dashboard](https://via.placeholder.com/300x600?text=Main+Dashboard) | ![POS Interface](https://via.placeholder.com/300x600?text=POS+Interface) | ![Checkout](https://via.placeholder.com/300x600?text=Checkout) |
+| ![Dashboard](screenshots/dashboard.png) | ![Branch Selector](screenshots/branch_selector.png) | ![Control Panel](screenshots/control_panel.png) |
 
-| Printer Settings | Receipt Preview | Product Management |
+### 🛒 POS & Transactions
+The cashier interface where products are selected and transactions are processed.
+
+| POS Interface | Printer Settings | Logout Confirmation |
 |:---:|:---:|:---:|
-| ![Printer Settings](https://via.placeholder.com/300x600?text=Printer+Settings) | ![Receipt](https://via.placeholder.com/300x600?text=Receipt) | ![Product Management](https://via.placeholder.com/300x600?text=Product+Management) |
+| ![POS](screenshots/pos.png) | ![Printer](screenshots/printer_settings.png) | ![Logout](screenshots/logout.png) |
 
-*> Note: Replace placeholders above with actual screenshots from the `docs/screenshots` folder.*
+### 📦 Product & Category Management
+Tools to manage what you sell and how you categorize them.
+
+| Product List | Add Product | Category List | Add Category |
+|:---:|:---:|:---:|:---:|
+| ![Product List](screenshots/product_list.png) | ![Add Product](screenshots/add_product.png) | ![Category List](screenshots/category_list.png) | ![Add Category](screenshots/add_category.png) |
+
+### 🏢 Branch & Employee Management
+Managing your team and your store locations.
+
+| Branch List | Add Branch | Employee List | Add Employee |
+|:---:|:---:|:---:|:---:|
+| ![Branch List](screenshots/branch_list.png) | ![Add Branch](screenshots/add_branch.png) | ![Employee List](screenshots/employee_list.png) | ![Add Employee](screenshots/add_employee.png) |
+
+---
 
 ## 🛠️ Tech Stack
 
-- **Language:** [Kotlin](https://kotlinlang.org/)
-- **Backend:** [Firebase Realtime Database](https://firebase.google.com/docs/database)
-- **UI Framework:** Material Components for Android (Material 3)
-- **Architecture:** MVVM (Model-View-ViewModel)
-- **Communication:** Bluetooth ESC/POS for Thermal Printing
+- **Language:** Kotlin
+- **Backend:** Firebase Realtime Database
+- **UI Framework:** Material Components (Material 3)
+- **Printing:** ESC/POS Bluetooth Command Set
 
 ## ⚙️ Installation
 
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/username/TokoKita_POS_Application.git
-   ```
-2. Open the project in **Android Studio (Hedgehog or newer)**.
-3. Connect your project to your **Firebase Console**.
-4. Download `google-services.json` and place it in the `app/` directory.
-5. Build and run the application.
-
-## 📝 License
-
-Distributed under the MIT License. See `LICENSE` for more information.
+1. Clone this repository.
+2. Open in **Android Studio**.
+3. Add your `google-services.json` from Firebase.
+4. Build and Run.
 
 ---
 *Developed with ❤️ by the TokoKita Team.*
