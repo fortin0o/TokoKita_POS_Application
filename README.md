@@ -19,8 +19,7 @@ The central hub for all activities, showing today's revenue and quick access men
 
 | Main Dashboard | Branch Selector | Control Panel | Exit Dialog |
 |:---:|:---:|:---:|:---:|
-| ![Dashboard](screenshots/employee_list.jpeg) | ![Branch Selector](screenshots/branch_selector.jpeg) | ![Control Panel](screenshots/control_panel.jpeg) | ![Exit Dialog](screenshots/dashboard.jpeg) |
-
+| ![Dashboard](screenshots/employee_list.jpeg) | ![Branch Selector](screenshots/branch_selector.jpeg) | ![Control Panel](screenshots/control_panel.jpeg) | 
 ### 🛒 POS & Printing
 The cashier interface and printer configuration.
 
